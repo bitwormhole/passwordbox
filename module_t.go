@@ -7,6 +7,12 @@ import (
 	"github.com/bitwormhole/passwordbox/gen/test4pwbox"
 	"github.com/starter-go/application"
 	"github.com/starter-go/libgin/modules/libgin"
+	"github.com/starter-go/libgorm/modules/libgorm"
+
+	// "github.com/starter-go/module-gorm-sqlite/modules/sqlite"
+
+	"github.com/starter-go/module-gorm-mysql/modules/mysql"
+	"github.com/starter-go/module-gorm-sqlserver/modules/sqlserver"
 )
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -43,6 +49,10 @@ func Module() application.Module {
 	mb.Components(main4pwbox.ExportComponents)
 
 	mb.Depend(libgin.Module())
+	mb.Depend(libgorm.Module())
+
+	mb.Depend(mysql.Module())
+	mb.Depend(sqlserver.Module())
 
 	return mb.Create()
 }
