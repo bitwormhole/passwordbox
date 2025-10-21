@@ -1,3 +1,3 @@
 # passwordbox
 
-passwordbox 是一个更安全，更便捷的轻量级密码管理器
+passwordbox 是一个极简的生成式密码管理器，用 go 实现。

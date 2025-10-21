@@ -1,5 +1,14 @@
 package passwordbox
 
+import (
+	"embed"
+
+	"github.com/bitwormhole/passwordbox/gen/main4pwbox"
+	"github.com/bitwormhole/passwordbox/gen/test4pwbox"
+	"github.com/starter-go/application"
+	"github.com/starter-go/libgin/modules/libgin"
+)
+
 ////////////////////////////////////////////////////////////////////////////////
 
 const (
@@ -10,10 +19,48 @@ const (
 
 ////////////////////////////////////////////////////////////////////////////////
 
+const (
+	theSrcMainResPath = "src/main/resources"
+	theSrcTestResPath = "src/test/resources"
+)
+
+//go:embed "src/main/resources"
+var theSrcMainResFS embed.FS
+
+//go:embed "src/test/resources"
+var theSrcTestResFS embed.FS
+
 ////////////////////////////////////////////////////////////////////////////////
 
-func Module() int {
+func Module() application.Module {
 
-	return 0
+	mb := new(application.ModuleBuilder)
+	mb.Name(theModuleName + "#main")
+	mb.Version(theModuleVersion)
+	mb.Revision(theModuleRevision)
+	mb.EmbedResources(theSrcMainResFS, theSrcMainResPath)
 
+	mb.Components(main4pwbox.ExportComponents)
+
+	mb.Depend(libgin.Module())
+
+	return mb.Create()
 }
+
+func ModuleForTest() application.Module {
+
+	mb := new(application.ModuleBuilder)
+	mb.Name(theModuleName + "#test")
+	mb.Version(theModuleVersion)
+	mb.Revision(theModuleRevision)
+	mb.EmbedResources(theSrcTestResFS, theSrcTestResPath)
+
+	mb.Components(test4pwbox.ExportComponents)
+
+	mb.Depend(Module())
+
+	return mb.Create()
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// EOF
