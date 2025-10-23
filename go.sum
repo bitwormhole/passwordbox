@@ -115,6 +115,8 @@ github.com/starter-go/configen v0.9.5 h1:KTwueLMQA3Ba70sJddK+hOLEifOI0dTXpPkX/ji
 github.com/starter-go/configen v0.9.5/go.mod h1:n3qiv4z1nZ0h4qfcX9Ju8kUMgjuLUkv0EvL6lxQOwtQ=
 github.com/starter-go/i18n v0.0.4 h1:8gKn+pFUqYvPXZfTrtnRa1Urlc7jp8BAEB7EFs7C0ko=
 github.com/starter-go/i18n v0.0.4/go.mod h1:U5nd0lWaAZ8IGzG4ZHBxV9CAlPvTt2h/eJc0NqUulZg=
+github.com/starter-go/keyvalues v0.0.1 h1:nwvE7xp0eCq5rjHfLyYFEfowgZkDYBZcIT39c9ECjjk=
+github.com/starter-go/keyvalues v0.0.1/go.mod h1:+S65W4rMjMYQZAmt766453lksB5C3PPp794W3iTCmVA=
 github.com/starter-go/libafs v0.0.7 h1:o8UI6OFhaQp5yLxXrXb5Na7LZ/XVHHBER0f7POCcLv0=
 github.com/starter-go/libafs v0.0.7/go.mod h1:IhwhU5gaIduI8/8doKyoyJ0hHZECT3neyNHYYF9ls+A=
 github.com/starter-go/libgin v1.0.19 h1:FNLuR18HOTM2dfbPxiBLPYUY2EyY/9dcIDFYINEzllk=
@@ -127,12 +129,12 @@ github.com/starter-go/module-gorm-mysql v1.0.0 h1:aWZ9Pc0EajrifTCMizQ9Q2RPpD1w3w
 github.com/starter-go/module-gorm-mysql v1.0.0/go.mod h1:lNbJjC0EcO6xkOPEpXVi0bZq9Tc21tlkzaR91o9JEqY=
 github.com/starter-go/module-gorm-sqlserver v1.0.0 h1:hcQdqcFhV5BU8JLX6SqerJUx9zSGcJdmESYp1b25SaU=
 github.com/starter-go/module-gorm-sqlserver v1.0.0/go.mod h1:wedB0beg5CbfCIUYa+N/E6NLKWtYwluOfDMdRiqq9ug=
-github.com/starter-go/rbac v0.0.12 h1:RFmvMaRxQaWeMGG8GyWftO4Nsze89l+hKk/LgbJB390=
-github.com/starter-go/rbac v0.0.12/go.mod h1:N93w2twpuiCD1yDDBeVyRm2a+Voz0OIpIpxpuox7fUY=
-github.com/starter-go/rbac v0.0.13 h1:856fe2y7eOKmYQfoowaTu2NMQvjvq+8ed+e4syzhl3k=
-github.com/starter-go/rbac v0.0.13/go.mod h1:gXIuKkdcVPR/FXm2m+VBhl4Ri7ksyn1UCLjDXtC+H6Q=
-github.com/starter-go/security-gorm v1.0.55 h1:R8KEQklmp19hWwk0u4Pd/IvUtAdD4fD7ij4kspYO5hc=
-github.com/starter-go/security-gorm v1.0.55/go.mod h1:hGA7t7YwMUI+5V1XvabgLt8mOPPs5WmT13vTadvbdAM=
+github.com/starter-go/rbac v0.0.11 h1:9UYHYWB1meJz8e9JMPtlIAfw8cYofQijRB3sSRW1gAA=
+github.com/starter-go/rbac v0.0.11/go.mod h1:N93w2twpuiCD1yDDBeVyRm2a+Voz0OIpIpxpuox7fUY=
+github.com/starter-go/security v1.0.54 h1:2irJaAhkKVcm7XpP0jKNFQZpslv88US8K3Zl6vO8XeQ=
+github.com/starter-go/security v1.0.54/go.mod h1:WQkxWC12s/qpasD0Mbc3IiTN+Xp94nJwbe0NkLiKrQg=
+github.com/starter-go/security-gorm v1.0.54 h1:hrAw0k4mIwiZyZ5eN7qlCG/QiN7ULEeNG5Uh6Kmnpc0=
+github.com/starter-go/security-gorm v1.0.54/go.mod h1:8NZoxJT6IoKnLuMUtkQ908ZEtKeLp04o24V7oMK1X4M=
 github.com/starter-go/starter v1.0.14 h1:TPVTOlKrU/9XBuSVy2hzQb13gKT1Sbup/s3vQ5GrhqM=
 github.com/starter-go/starter v1.0.14/go.mod h1:6yqAF+I/kEXPbcCczo6Bg2icETyxG9AyhdjmMoUeFq8=
 github.com/starter-go/stopper v0.0.4 h1:mg82TqrR99xowmPdrRqUKrbc3N6XzvGs5p9T5TJBQA0=
@@ -248,5 +250,3 @@ gorm.io/gorm v1.25.2-0.20230530020048-26663ab9bf55/go.mod h1:L4uxeKpfBml98NYqVqw
 gorm.io/gorm v1.25.2-0.20230610234218-206613868439/go.mod h1:L4uxeKpfBml98NYqVqwAdmV1a2nBtAec/cf3fpucW/k=
 gorm.io/gorm v1.25.5 h1:zR9lOiiYf09VNh5Q1gphfyia1JpiClIWG9hQaxB/mls=
 gorm.io/gorm v1.25.5/go.mod h1:hbnx/Oo0ChWMn1BIhpy1oYozzpM15i4YPuHDmfYtwg8=
-gorm.io/gorm v1.30.1 h1:lSHg33jJTBxs2mgJRfRZeLDG+WZaHYCk3Wtfl6Ngzo4=
-gorm.io/gorm v1.30.1/go.mod h1:8Z33v652h4//uMA76KjeDH8mJXPm1QNCYrMeatR0DOE=

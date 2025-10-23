@@ -41,9 +41,13 @@ func (inst *PasswordController) route(rp libgin.RouterProxy) error {
 	rp.GET("", inst.handleGetList)
 	rp.GET(":id", inst.handleGetOne)
 
-	rp.POST("", inst.handlePostOne)
 	rp.PUT(":id", inst.handlePutOne)
 	rp.DELETE(":id", inst.handleDeleteOne)
+
+	rp.POST("", inst.handlePostOne)
+	rp.POST("do/init-new-password", inst.handlePostExample)
+	rp.POST(":id/create-new-revision", inst.handlePostExample)
+	rp.POST(":id/apply", inst.handlePostExample)
 
 	return nil
 }
@@ -106,6 +110,18 @@ func (inst *PasswordController) handleDeleteOne(gc *gin.Context) {
 	req.wantRequestBody = false
 
 	req.execute(req.doRemoveItem)
+}
+
+func (inst *PasswordController) handlePostExample(gc *gin.Context) {
+
+	req := new(myPasswordRequest)
+	req.context = gc
+	req.controller = inst
+
+	req.wantRequestID = false
+	req.wantRequestBody = true
+
+	req.execute(req.doExample)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -192,13 +208,16 @@ func (inst *myPasswordRequest) doFindItem() error {
 
 func (inst *myPasswordRequest) doInsertItem() error {
 
+	ctx := inst.context
+	ser := inst.controller.Service
 	it1 := inst.body1.Items[0]
-	it2 := &dto.Password{}
-	id := inst.id
 
-	it2.ID = id
+	it2, err := ser.Insert(ctx, it1)
+	if err != nil {
+		return err
+	}
 
-	inst.body2.Items = []*dto.Password{it1, it2}
+	inst.body2.Items = []*dto.Password{it2}
 	return nil
 }
 
@@ -215,6 +234,18 @@ func (inst *myPasswordRequest) doUpdateItem() error {
 }
 
 func (inst *myPasswordRequest) doRemoveItem() error {
+
+	it1 := inst.body1.Items[0]
+	it2 := &dto.Password{}
+	id := inst.id
+
+	it2.ID = id
+
+	inst.body2.Items = []*dto.Password{it1, it2}
+	return nil
+}
+
+func (inst *myPasswordRequest) doExample() error {
 
 	it1 := inst.body1.Items[0]
 	it2 := &dto.Password{}

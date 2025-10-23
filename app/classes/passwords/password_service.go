@@ -17,4 +17,10 @@ type Service interface {
 	Update(ctx context.Context, id dxo.PasswordID, item *dto.Password) (*dto.Password, error)
 
 	Remove(ctx context.Context, id dxo.PasswordID) error
+
+	// 初始化一个新的账号
+	InitNewAccount(ctx context.Context, item *dto.Password, at dxo.AccountType) (*dto.Password, error)
+
+	// 创建一个新的密码版本
+	CreateNewRevision(ctx context.Context, item *dto.Password) (*dto.Password, error)
 }

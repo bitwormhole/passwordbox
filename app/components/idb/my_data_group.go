@@ -12,8 +12,8 @@ type MyDataGroup struct {
 	_as func(libgorm.GroupRegistry) //starter:as(".")
 
 	Alias   string //starter:inject("${datagroup.passwordbox.alias}")
-	Prefix  string //starter:inject("${datagroup.passwordbox.prefix}")
-	Source  string //starter:inject("${datagroup.passwordbox.source}")
+	Prefix  string //starter:inject("${datagroup.passwordbox.table-name-prefix}")
+	Source  string //starter:inject("${datagroup.passwordbox.datasource}")
 	URI     string //starter:inject("${datagroup.passwordbox.uri}")
 	Enabled bool   //starter:inject("${datagroup.passwordbox.enabled}")
 }

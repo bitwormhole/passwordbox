@@ -11,8 +11,7 @@ require (
 	github.com/starter-go/libgorm v0.9.12
 	github.com/starter-go/module-gorm-mysql v1.0.0
 	github.com/starter-go/module-gorm-sqlserver v1.0.0
-	github.com/starter-go/rbac v0.0.12
-	github.com/starter-go/security-gorm v1.0.55
+	github.com/starter-go/rbac v0.0.11
 	github.com/starter-go/starter v1.0.14
 	gorm.io/gorm v1.25.5
 )
@@ -29,6 +28,7 @@ require (
 	github.com/go-sql-driver/mysql v1.7.1 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/goccy/go-yaml v1.18.0 // indirect
+	github.com/golang-jwt/jwt/v5 v5.2.0 // indirect
 	github.com/golang-sql/civil v0.0.0-20220223132316-b832511892a9 // indirect
 	github.com/golang-sql/sqlexp v0.1.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
@@ -44,11 +44,14 @@ require (
 	github.com/quic-go/qpack v0.5.1 // indirect
 	github.com/quic-go/quic-go v0.54.0 // indirect
 	github.com/starter-go/afs v0.9.13 // indirect
-	github.com/starter-go/base v0.9.11 // indirect
+	github.com/starter-go/base v0.9.11
 	github.com/starter-go/configen v0.9.5 // indirect
 	github.com/starter-go/i18n v0.0.4 // indirect
+	github.com/starter-go/keyvalues v0.0.1 // indirect
 	github.com/starter-go/libafs v0.0.7 // indirect
 	github.com/starter-go/mimetypes v0.0.2 // indirect
+	github.com/starter-go/security v1.0.54
+	github.com/starter-go/security-gorm v1.0.54
 	github.com/starter-go/stopper v0.0.4 // indirect
 	github.com/starter-go/units v0.0.6 // indirect
 	github.com/starter-go/vlog v0.9.12 // indirect

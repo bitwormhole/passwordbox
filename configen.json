@@ -8,6 +8,16 @@
                 "r": true
             },
             {
+                "id": "hub",
+                "path": "src/hub/webapp",
+                "r": true
+            },
+            {
+                "id": "weixin",
+                "path": "src/weixin/webapp",
+                "r": true
+            },
+            {
                 "id": "test",
                 "path": "src/test/golang",
                 "r": true
@@ -19,6 +29,20 @@
                 "path": "gen/main4pwbox",
                 "sources": [
                     "main"
+                ]
+            },
+            {
+                "id": "hub",
+                "path": "gen/hub4pwbox",
+                "sources": [
+                    "hub"
+                ]
+            },
+            {
+                "id": "weixin",
+                "path": "gen/weixin4pwbox",
+                "sources": [
+                    "weixin"
                 ]
             },
             {
