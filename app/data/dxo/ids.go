@@ -8,10 +8,18 @@ type ExampleID Int64ID
 
 type AuthID Int64ID
 
+type BinaryDataID Int64ID
+
 type ProviderID Int64ID
 
-type PasswordID Int64ID
+type PasswordBlockID Int64ID
+
+type PasswordChainID Int64ID
 
 type KeyPairID Int64ID
 
 type UserID = rbac.UserID
+
+// alias
+
+type PasswordID = PasswordChainID

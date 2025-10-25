@@ -1,77 +1,69 @@
 package passwords
 
-import (
-	"strings"
+// func MakeUniquePathWithDTO(item *dto.Password) dxo.UniformPath {
+// 	mk := new(innerUniquePathMaker)
+// 	mk.initWithDTO(item)
+// 	return mk.create()
+// }
 
-	"github.com/bitwormhole/passwordbox/app/data/dxo"
-	"github.com/bitwormhole/passwordbox/app/data/entity"
-	"github.com/bitwormhole/passwordbox/app/web/dto"
-)
+// func MakeUniquePathWithEntity(item *entity.PasswordRef) dxo.UniformPath {
+// 	mk := new(innerUniquePathMaker)
+// 	mk.initWithEntity(item)
+// 	return mk.create()
+// }
 
-func MakeUniquePathWithDTO(item *dto.Password) dxo.UniquePath {
-	mk := new(innerUniquePathMaker)
-	mk.initWithDTO(item)
-	return mk.create()
-}
+// ////////////////////////////////////////////////////////////////////////////////
 
-func MakeUniquePathWithEntity(item *entity.Password) dxo.UniquePath {
-	mk := new(innerUniquePathMaker)
-	mk.initWithEntity(item)
-	return mk.create()
-}
+// type innerUniquePathMaker struct {
+// 	builder strings.Builder
+// }
 
-////////////////////////////////////////////////////////////////////////////////
+// func (inst *innerUniquePathMaker) create() dxo.UniformPath {
+// 	builder := &inst.builder
+// 	str := builder.String()
+// 	return dxo.UniformPath(str)
+// }
 
-type innerUniquePathMaker struct {
-	builder strings.Builder
-}
+// func (inst *innerUniquePathMaker) addElement(el string) {
 
-func (inst *innerUniquePathMaker) create() dxo.UniquePath {
-	builder := &inst.builder
-	str := builder.String()
-	return dxo.UniquePath(str)
-}
+// 	const sep = '/'
 
-func (inst *innerUniquePathMaker) addElement(el string) {
+// 	el = strings.ReplaceAll(el, string(sep), "-")
+// 	el = strings.TrimSpace(el)
 
-	const sep = '/'
+// 	if len(el) < 1 {
+// 		el = "undefined"
+// 	}
 
-	el = strings.ReplaceAll(el, string(sep), "-")
-	el = strings.TrimSpace(el)
+// 	builder := &inst.builder
+// 	builder.WriteRune(sep)
+// 	builder.WriteString(el)
+// }
 
-	if len(el) < 1 {
-		el = "undefined"
-	}
+// func (inst *innerUniquePathMaker) init(it *dto.Password) {
 
-	builder := &inst.builder
-	builder.WriteRune(sep)
-	builder.WriteString(el)
-}
+// 	rev := it.Revision.String()
 
-func (inst *innerUniquePathMaker) init(it *dto.Password) {
+// 	inst.addElement(it.Email.String())
+// 	inst.addElement(it.Domain1.String())
+// 	inst.addElement(it.Domain2.String())
+// 	inst.addElement(it.UserName)
+// 	inst.addElement(it.Scene)
+// 	inst.addElement(rev)
+// }
 
-	rev := it.Revision.String()
+// func (inst *innerUniquePathMaker) initWithDTO(it1 *dto.Password) {
+// 	it2 := new(dto.Password)
+// 	if it1 != nil {
+// 		*it2 = *it1
+// 	}
+// 	inst.init(it2)
+// }
 
-	inst.addElement(it.Email.String())
-	inst.addElement(it.Domain1.String())
-	inst.addElement(it.Domain2.String())
-	inst.addElement(it.UserName)
-	inst.addElement(it.Scene)
-	inst.addElement(rev)
-}
-
-func (inst *innerUniquePathMaker) initWithDTO(it1 *dto.Password) {
-	it2 := new(dto.Password)
-	if it1 != nil {
-		*it2 = *it1
-	}
-	inst.init(it2)
-}
-
-func (inst *innerUniquePathMaker) initWithEntity(it1 *entity.Password) {
-	it2 := new(dto.Password)
-	if it1 != nil {
-		ConvertE2D(it1, it2)
-	}
-	inst.init(it2)
-}
+// func (inst *innerUniquePathMaker) initWithEntity(it1 *entity.PasswordRef) {
+// 	it2 := new(dto.Password)
+// 	if it1 != nil {
+// 		ConvertE2D(it1, nil, it2)
+// 	}
+// 	inst.init(it2)
+// }

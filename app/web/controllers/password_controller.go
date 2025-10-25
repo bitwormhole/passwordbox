@@ -21,7 +21,11 @@ type PasswordController struct {
 
 	Sender libgin.Responder //starter:inject("#")
 
-	Service passwords.Service //starter:inject("#")
+	Service     passwords.Service      //starter:inject("#")
+	FastService passwords.FastService  //starter:inject("#")
+	Chains      passwords.ChainService //starter:inject("#")
+	Blocks      passwords.BlockService //starter:inject("#")
+
 }
 
 func (inst *PasswordController) _impl() libgin.Controller {
@@ -38,16 +42,30 @@ func (inst *PasswordController) route(rp libgin.RouterProxy) error {
 
 	rp = rp.For("passwords")
 
+	// get
+
 	rp.GET("", inst.handleGetList)
 	rp.GET(":id", inst.handleGetOne)
 
-	rp.PUT(":id", inst.handlePutOne)
-	rp.DELETE(":id", inst.handleDeleteOne)
+	rp.GET("chains/:id", inst.handleGetOne)
+	rp.GET("blocks/:id", inst.handleGetOne)
+
+	// post
 
 	rp.POST("", inst.handlePostOne)
-	rp.POST("do/init-new-password", inst.handlePostExample)
 	rp.POST(":id/create-new-revision", inst.handlePostExample)
 	rp.POST(":id/apply", inst.handlePostExample)
+
+	rp.POST("do/init-new-password", inst.handlePostExample)
+	rp.POST("do/fast-gen", inst.handlePostFastGen)
+
+	rp.POST("blocks", inst.handlePostExample)
+	rp.POST("chains", inst.handlePostExample)
+
+	// others
+
+	rp.PUT(":id", inst.handlePutOne)
+	rp.DELETE(":id", inst.handleDeleteOne)
 
 	return nil
 }
@@ -122,6 +140,18 @@ func (inst *PasswordController) handlePostExample(gc *gin.Context) {
 	req.wantRequestBody = true
 
 	req.execute(req.doExample)
+}
+
+func (inst *PasswordController) handlePostFastGen(gc *gin.Context) {
+
+	req := new(myPasswordRequest)
+	req.context = gc
+	req.controller = inst
+
+	req.wantRequestID = false
+	req.wantRequestBody = true
+
+	req.execute(req.doFastGen)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -254,6 +284,21 @@ func (inst *myPasswordRequest) doExample() error {
 	it2.ID = id
 
 	inst.body2.Items = []*dto.Password{it1, it2}
+	return nil
+}
+
+func (inst *myPasswordRequest) doFastGen() error {
+
+	ctx := inst.context
+	ser := inst.controller.FastService
+	it1 := inst.body1.Items[0]
+
+	it2, err := ser.MakeFastGen(ctx, it1)
+	if err != nil {
+		return err
+	}
+
+	inst.body2.Items = []*dto.Password{it2}
 	return nil
 }
 

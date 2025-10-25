@@ -5,40 +5,61 @@ import (
 	"github.com/starter-go/base/lang"
 )
 
-type Password struct {
+// 表示四个维度的密码坐标
+type PasswordCoordinate struct {
+	Email    dxo.EmailAddress
+	Domain   dxo.DomainName
+	Username string
+	Scene    string
+}
+
+// 用于生成密码的数据块
+type PasswordBlock struct {
 
 	// ids
 
-	ID     dxo.PasswordID
-	Parent dxo.PasswordID // 上一个版本的 ID
-	Head   dxo.PasswordID // 当前版本的 ID ( 仅仅当这个 entity 的 Revision==0 时有效 )
-	Root   dxo.PasswordID // 版本 '0' 的 ID
+	ID dxo.PasswordBlockID
 
 	Base
 
-	// params(base)
+	PasswordCoordinate
 
-	Email    dxo.EmailAddress
-	Domain1  dxo.DomainName
-	Domain2  dxo.DomainName
-	UserName string
-	Scene    string
+	// refer
+
+	Chain dxo.PasswordChainID // 所属密码链
+
+	// parent
+
+	Parent dxo.BlockFingerPrint // 上个版本的指纹
+
+	Self dxo.BlockFingerPrint // 这个版本的指纹
+
+	// params(this)
+
 	Revision dxo.Revision
+	Charset  string
+	Length   int
+	Salt     lang.Hex
 
-	// params(ext)
+	// content
 
-	Charset string
-	Length  int
-	Salt    lang.Base64
-	Word    lang.Base64 // ( 生成模式：为空 | 存储模式：经过加密的用户密码 )
+	Secret dxo.BinaryDataRef // ( 生成模式：为空 | 存储模式：经过加密的用户密码 )
 
-	// others
+	Content dxo.BinaryDataRef // 用于计算摘要的内容
+}
 
-	Path dxo.UniquePath `gorm:"unique"` // 这个实体的唯一路径
+// 对 密码链的头部 引用
+type PasswordChain struct {
 
-	ParentDigest dxo.Digest // 上一个版本的摘要
-	ThisDigest   dxo.Digest // 这个版本的摘要
+	// ids
 
-	Latest      dxo.Revision    // 最新版本（ 仅当 entity 的 Revision==0 时有效 ）
-	AccountType dxo.AccountType // 表示账号类型
+	ID dxo.PasswordChainID
+
+	Base
+
+	PasswordCoordinate
+
+	// HEAD
+
+	Head dxo.BlockFingerPrint
 }

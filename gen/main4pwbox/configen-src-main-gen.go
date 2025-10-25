@@ -165,34 +165,34 @@ func (inst* p510a2f38b0_ihubproviders_ProviderServiceImpl) inject(injext applica
 
 
 
-// type pc22dbb856.PasswordDaoImpl in package:github.com/bitwormhole/passwordbox/app/components/ipasswords
+// type pc22dbb856.PasswordBlockDaoImpl in package:github.com/bitwormhole/passwordbox/app/components/ipasswords
 //
-// id:com-c22dbb856b626c34-ipasswords-PasswordDaoImpl
+// id:com-c22dbb856b626c34-ipasswords-PasswordBlockDaoImpl
 // class:
-// alias:alias-5ce388db2e113c065a05f219a63b6c9e-DAO
+// alias:alias-5ce388db2e113c065a05f219a63b6c9e-BlockDAO
 // scope:singleton
 //
-type pc22dbb856b_ipasswords_PasswordDaoImpl struct {
+type pc22dbb856b_ipasswords_PasswordBlockDaoImpl struct {
 }
 
-func (inst* pc22dbb856b_ipasswords_PasswordDaoImpl) register(cr application.ComponentRegistry) error {
+func (inst* pc22dbb856b_ipasswords_PasswordBlockDaoImpl) register(cr application.ComponentRegistry) error {
 	r := cr.NewRegistration()
-	r.ID = "com-c22dbb856b626c34-ipasswords-PasswordDaoImpl"
+	r.ID = "com-c22dbb856b626c34-ipasswords-PasswordBlockDaoImpl"
 	r.Classes = ""
-	r.Aliases = "alias-5ce388db2e113c065a05f219a63b6c9e-DAO"
+	r.Aliases = "alias-5ce388db2e113c065a05f219a63b6c9e-BlockDAO"
 	r.Scope = "singleton"
 	r.NewFunc = inst.new
 	r.InjectFunc = inst.inject
 	return r.Commit()
 }
 
-func (inst* pc22dbb856b_ipasswords_PasswordDaoImpl) new() any {
-    return &pc22dbb856.PasswordDaoImpl{}
+func (inst* pc22dbb856b_ipasswords_PasswordBlockDaoImpl) new() any {
+    return &pc22dbb856.PasswordBlockDaoImpl{}
 }
 
-func (inst* pc22dbb856b_ipasswords_PasswordDaoImpl) inject(injext application.InjectionExt, instance any) error {
+func (inst* pc22dbb856b_ipasswords_PasswordBlockDaoImpl) inject(injext application.InjectionExt, instance any) error {
 	ie := injext
-	com := instance.(*pc22dbb856.PasswordDaoImpl)
+	com := instance.(*pc22dbb856.PasswordBlockDaoImpl)
 	nop(ie, com)
 
 	
@@ -204,13 +204,213 @@ func (inst* pc22dbb856b_ipasswords_PasswordDaoImpl) inject(injext application.In
 }
 
 
-func (inst*pc22dbb856b_ipasswords_PasswordDaoImpl) getAgent(ie application.InjectionExt)p2b6038bff.Agent{
+func (inst*pc22dbb856b_ipasswords_PasswordBlockDaoImpl) getAgent(ie application.InjectionExt)p2b6038bff.Agent{
     return ie.GetComponent("#alias-2b6038bffa71faffd95c7cfc51d90a77-Agent").(p2b6038bff.Agent)
 }
 
 
-func (inst*pc22dbb856b_ipasswords_PasswordDaoImpl) getUUIDService(ie application.InjectionExt)p9621e8b71.UUIDService{
+func (inst*pc22dbb856b_ipasswords_PasswordBlockDaoImpl) getUUIDService(ie application.InjectionExt)p9621e8b71.UUIDService{
     return ie.GetComponent("#alias-9621e8b71013b0fc25942a1749ed3652-UUIDService").(p9621e8b71.UUIDService)
+}
+
+
+
+// type pc22dbb856.PasswordBlockServiceImpl in package:github.com/bitwormhole/passwordbox/app/components/ipasswords
+//
+// id:com-c22dbb856b626c34-ipasswords-PasswordBlockServiceImpl
+// class:
+// alias:alias-5ce388db2e113c065a05f219a63b6c9e-BlockService
+// scope:singleton
+//
+type pc22dbb856b_ipasswords_PasswordBlockServiceImpl struct {
+}
+
+func (inst* pc22dbb856b_ipasswords_PasswordBlockServiceImpl) register(cr application.ComponentRegistry) error {
+	r := cr.NewRegistration()
+	r.ID = "com-c22dbb856b626c34-ipasswords-PasswordBlockServiceImpl"
+	r.Classes = ""
+	r.Aliases = "alias-5ce388db2e113c065a05f219a63b6c9e-BlockService"
+	r.Scope = "singleton"
+	r.NewFunc = inst.new
+	r.InjectFunc = inst.inject
+	return r.Commit()
+}
+
+func (inst* pc22dbb856b_ipasswords_PasswordBlockServiceImpl) new() any {
+    return &pc22dbb856.PasswordBlockServiceImpl{}
+}
+
+func (inst* pc22dbb856b_ipasswords_PasswordBlockServiceImpl) inject(injext application.InjectionExt, instance any) error {
+	ie := injext
+	com := instance.(*pc22dbb856.PasswordBlockServiceImpl)
+	nop(ie, com)
+
+	
+    com.DaoChains = inst.getDaoChains(ie)
+    com.DaoBlocks = inst.getDaoBlocks(ie)
+
+
+    return nil
+}
+
+
+func (inst*pc22dbb856b_ipasswords_PasswordBlockServiceImpl) getDaoChains(ie application.InjectionExt)p5ce388db2.ChainDAO{
+    return ie.GetComponent("#alias-5ce388db2e113c065a05f219a63b6c9e-ChainDAO").(p5ce388db2.ChainDAO)
+}
+
+
+func (inst*pc22dbb856b_ipasswords_PasswordBlockServiceImpl) getDaoBlocks(ie application.InjectionExt)p5ce388db2.BlockDAO{
+    return ie.GetComponent("#alias-5ce388db2e113c065a05f219a63b6c9e-BlockDAO").(p5ce388db2.BlockDAO)
+}
+
+
+
+// type pc22dbb856.PasswordChainDaoImpl in package:github.com/bitwormhole/passwordbox/app/components/ipasswords
+//
+// id:com-c22dbb856b626c34-ipasswords-PasswordChainDaoImpl
+// class:
+// alias:alias-5ce388db2e113c065a05f219a63b6c9e-ChainDAO
+// scope:singleton
+//
+type pc22dbb856b_ipasswords_PasswordChainDaoImpl struct {
+}
+
+func (inst* pc22dbb856b_ipasswords_PasswordChainDaoImpl) register(cr application.ComponentRegistry) error {
+	r := cr.NewRegistration()
+	r.ID = "com-c22dbb856b626c34-ipasswords-PasswordChainDaoImpl"
+	r.Classes = ""
+	r.Aliases = "alias-5ce388db2e113c065a05f219a63b6c9e-ChainDAO"
+	r.Scope = "singleton"
+	r.NewFunc = inst.new
+	r.InjectFunc = inst.inject
+	return r.Commit()
+}
+
+func (inst* pc22dbb856b_ipasswords_PasswordChainDaoImpl) new() any {
+    return &pc22dbb856.PasswordChainDaoImpl{}
+}
+
+func (inst* pc22dbb856b_ipasswords_PasswordChainDaoImpl) inject(injext application.InjectionExt, instance any) error {
+	ie := injext
+	com := instance.(*pc22dbb856.PasswordChainDaoImpl)
+	nop(ie, com)
+
+	
+    com.Agent = inst.getAgent(ie)
+    com.UUIDService = inst.getUUIDService(ie)
+
+
+    return nil
+}
+
+
+func (inst*pc22dbb856b_ipasswords_PasswordChainDaoImpl) getAgent(ie application.InjectionExt)p2b6038bff.Agent{
+    return ie.GetComponent("#alias-2b6038bffa71faffd95c7cfc51d90a77-Agent").(p2b6038bff.Agent)
+}
+
+
+func (inst*pc22dbb856b_ipasswords_PasswordChainDaoImpl) getUUIDService(ie application.InjectionExt)p9621e8b71.UUIDService{
+    return ie.GetComponent("#alias-9621e8b71013b0fc25942a1749ed3652-UUIDService").(p9621e8b71.UUIDService)
+}
+
+
+
+// type pc22dbb856.PasswordChainServiceImpl in package:github.com/bitwormhole/passwordbox/app/components/ipasswords
+//
+// id:com-c22dbb856b626c34-ipasswords-PasswordChainServiceImpl
+// class:
+// alias:alias-5ce388db2e113c065a05f219a63b6c9e-ChainService
+// scope:singleton
+//
+type pc22dbb856b_ipasswords_PasswordChainServiceImpl struct {
+}
+
+func (inst* pc22dbb856b_ipasswords_PasswordChainServiceImpl) register(cr application.ComponentRegistry) error {
+	r := cr.NewRegistration()
+	r.ID = "com-c22dbb856b626c34-ipasswords-PasswordChainServiceImpl"
+	r.Classes = ""
+	r.Aliases = "alias-5ce388db2e113c065a05f219a63b6c9e-ChainService"
+	r.Scope = "singleton"
+	r.NewFunc = inst.new
+	r.InjectFunc = inst.inject
+	return r.Commit()
+}
+
+func (inst* pc22dbb856b_ipasswords_PasswordChainServiceImpl) new() any {
+    return &pc22dbb856.PasswordChainServiceImpl{}
+}
+
+func (inst* pc22dbb856b_ipasswords_PasswordChainServiceImpl) inject(injext application.InjectionExt, instance any) error {
+	ie := injext
+	com := instance.(*pc22dbb856.PasswordChainServiceImpl)
+	nop(ie, com)
+
+	
+    com.DaoChains = inst.getDaoChains(ie)
+    com.DaoBlocks = inst.getDaoBlocks(ie)
+
+
+    return nil
+}
+
+
+func (inst*pc22dbb856b_ipasswords_PasswordChainServiceImpl) getDaoChains(ie application.InjectionExt)p5ce388db2.ChainDAO{
+    return ie.GetComponent("#alias-5ce388db2e113c065a05f219a63b6c9e-ChainDAO").(p5ce388db2.ChainDAO)
+}
+
+
+func (inst*pc22dbb856b_ipasswords_PasswordChainServiceImpl) getDaoBlocks(ie application.InjectionExt)p5ce388db2.BlockDAO{
+    return ie.GetComponent("#alias-5ce388db2e113c065a05f219a63b6c9e-BlockDAO").(p5ce388db2.BlockDAO)
+}
+
+
+
+// type pc22dbb856.PasswordFastServiceImpl in package:github.com/bitwormhole/passwordbox/app/components/ipasswords
+//
+// id:com-c22dbb856b626c34-ipasswords-PasswordFastServiceImpl
+// class:
+// alias:alias-5ce388db2e113c065a05f219a63b6c9e-FastService
+// scope:singleton
+//
+type pc22dbb856b_ipasswords_PasswordFastServiceImpl struct {
+}
+
+func (inst* pc22dbb856b_ipasswords_PasswordFastServiceImpl) register(cr application.ComponentRegistry) error {
+	r := cr.NewRegistration()
+	r.ID = "com-c22dbb856b626c34-ipasswords-PasswordFastServiceImpl"
+	r.Classes = ""
+	r.Aliases = "alias-5ce388db2e113c065a05f219a63b6c9e-FastService"
+	r.Scope = "singleton"
+	r.NewFunc = inst.new
+	r.InjectFunc = inst.inject
+	return r.Commit()
+}
+
+func (inst* pc22dbb856b_ipasswords_PasswordFastServiceImpl) new() any {
+    return &pc22dbb856.PasswordFastServiceImpl{}
+}
+
+func (inst* pc22dbb856b_ipasswords_PasswordFastServiceImpl) inject(injext application.InjectionExt, instance any) error {
+	ie := injext
+	com := instance.(*pc22dbb856.PasswordFastServiceImpl)
+	nop(ie, com)
+
+	
+    com.DaoRefs = inst.getDaoRefs(ie)
+    com.DaoBlocks = inst.getDaoBlocks(ie)
+
+
+    return nil
+}
+
+
+func (inst*pc22dbb856b_ipasswords_PasswordFastServiceImpl) getDaoRefs(ie application.InjectionExt)p5ce388db2.ChainDAO{
+    return ie.GetComponent("#alias-5ce388db2e113c065a05f219a63b6c9e-ChainDAO").(p5ce388db2.ChainDAO)
+}
+
+
+func (inst*pc22dbb856b_ipasswords_PasswordFastServiceImpl) getDaoBlocks(ie application.InjectionExt)p5ce388db2.BlockDAO{
+    return ie.GetComponent("#alias-5ce388db2e113c065a05f219a63b6c9e-BlockDAO").(p5ce388db2.BlockDAO)
 }
 
 
@@ -246,15 +446,21 @@ func (inst* pc22dbb856b_ipasswords_PasswordServiceImpl) inject(injext applicatio
 	nop(ie, com)
 
 	
-    com.Dao = inst.getDao(ie)
+    com.DaoChains = inst.getDaoChains(ie)
+    com.DaoBlocks = inst.getDaoBlocks(ie)
 
 
     return nil
 }
 
 
-func (inst*pc22dbb856b_ipasswords_PasswordServiceImpl) getDao(ie application.InjectionExt)p5ce388db2.DAO{
-    return ie.GetComponent("#alias-5ce388db2e113c065a05f219a63b6c9e-DAO").(p5ce388db2.DAO)
+func (inst*pc22dbb856b_ipasswords_PasswordServiceImpl) getDaoChains(ie application.InjectionExt)p5ce388db2.ChainDAO{
+    return ie.GetComponent("#alias-5ce388db2e113c065a05f219a63b6c9e-ChainDAO").(p5ce388db2.ChainDAO)
+}
+
+
+func (inst*pc22dbb856b_ipasswords_PasswordServiceImpl) getDaoBlocks(ie application.InjectionExt)p5ce388db2.BlockDAO{
+    return ie.GetComponent("#alias-5ce388db2e113c065a05f219a63b6c9e-BlockDAO").(p5ce388db2.BlockDAO)
 }
 
 
@@ -550,6 +756,9 @@ func (inst* p9f2da412c5_controllers_PasswordController) inject(injext applicatio
 	
     com.Sender = inst.getSender(ie)
     com.Service = inst.getService(ie)
+    com.FastService = inst.getFastService(ie)
+    com.Chains = inst.getChains(ie)
+    com.Blocks = inst.getBlocks(ie)
 
 
     return nil
@@ -563,6 +772,21 @@ func (inst*p9f2da412c5_controllers_PasswordController) getSender(ie application.
 
 func (inst*p9f2da412c5_controllers_PasswordController) getService(ie application.InjectionExt)p5ce388db2.Service{
     return ie.GetComponent("#alias-5ce388db2e113c065a05f219a63b6c9e-Service").(p5ce388db2.Service)
+}
+
+
+func (inst*p9f2da412c5_controllers_PasswordController) getFastService(ie application.InjectionExt)p5ce388db2.FastService{
+    return ie.GetComponent("#alias-5ce388db2e113c065a05f219a63b6c9e-FastService").(p5ce388db2.FastService)
+}
+
+
+func (inst*p9f2da412c5_controllers_PasswordController) getChains(ie application.InjectionExt)p5ce388db2.ChainService{
+    return ie.GetComponent("#alias-5ce388db2e113c065a05f219a63b6c9e-ChainService").(p5ce388db2.ChainService)
+}
+
+
+func (inst*p9f2da412c5_controllers_PasswordController) getBlocks(ie application.InjectionExt)p5ce388db2.BlockService{
+    return ie.GetComponent("#alias-5ce388db2e113c065a05f219a63b6c9e-BlockService").(p5ce388db2.BlockService)
 }
 
 

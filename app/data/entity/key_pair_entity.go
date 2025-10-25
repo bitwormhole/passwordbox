@@ -2,7 +2,6 @@ package entity
 
 import (
 	"github.com/bitwormhole/passwordbox/app/data/dxo"
-	"github.com/starter-go/base/lang"
 )
 
 type KeyPair struct {
@@ -12,10 +11,11 @@ type KeyPair struct {
 
 	Algorithm string
 
-	FingerPrint lang.Hex // 公钥指纹
+	Fingerprint dxo.PublicKeyFingerPrint // 公钥指纹
 
-	KeySize int // key size in bits
+	Size int // the key size in bits
 
-	PublicKey  dxo.PemFileText
-	PrivateKey dxo.PemFileText
+	RawPublicKey dxo.BinaryDataRef
+
+	RawPrivateKey dxo.BinaryDataRef
 }

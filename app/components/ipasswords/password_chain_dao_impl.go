@@ -12,32 +12,32 @@ import (
 	"gorm.io/gorm"
 )
 
-type PasswordDaoImpl struct {
+type PasswordChainDaoImpl struct {
 
 	//starter:component
 
-	_as func(passwords.DAO) //starter:as("#")
+	_as func(passwords.ChainDAO) //starter:as("#")
 
 	Agent       database.Agent     //starter:inject("#")
 	UUIDService random.UUIDService //starter:inject("#")
 }
 
-func (inst *PasswordDaoImpl) _impl() passwords.DAO {
+func (inst *PasswordChainDaoImpl) _impl() passwords.ChainDAO {
 	return inst
 }
 
-func (inst *PasswordDaoImpl) makeNewUUID() lang.UUID {
+func (inst *PasswordChainDaoImpl) makeNewUUID() lang.UUID {
 	b := inst.UUIDService.Build()
-	b.Class("entity.Password")
+	b.Class("entity.PasswordRef")
 	return b.Generate()
 }
 
-func (inst *PasswordDaoImpl) Find(db *gorm.DB, id dxo.PasswordID) (*entity.Password, error) {
+func (inst *PasswordChainDaoImpl) Find(db *gorm.DB, id dxo.PasswordID) (*entity.PasswordChain, error) {
 
 	return nil, fmt.Errorf("no impl")
 }
 
-func (inst *PasswordDaoImpl) Insert(db *gorm.DB, it *entity.Password) (*entity.Password, error) {
+func (inst *PasswordChainDaoImpl) Insert(db *gorm.DB, it *entity.PasswordChain) (*entity.PasswordChain, error) {
 
 	db = inst.Agent.DB(db)
 	uuid := inst.makeNewUUID()
@@ -53,13 +53,13 @@ func (inst *PasswordDaoImpl) Insert(db *gorm.DB, it *entity.Password) (*entity.P
 	return it, nil
 }
 
-func (inst *PasswordDaoImpl) Update(db *gorm.DB, id dxo.PasswordID, fn func(it *entity.Password) error) (*entity.Password, error) {
+func (inst *PasswordChainDaoImpl) Update(db *gorm.DB, id dxo.PasswordID, fn func(it *entity.PasswordChain) error) (*entity.PasswordChain, error) {
 
 	return nil, fmt.Errorf("no impl")
 
 }
 
-func (inst *PasswordDaoImpl) Remove(db *gorm.DB, id dxo.PasswordID) error {
+func (inst *PasswordChainDaoImpl) Remove(db *gorm.DB, id dxo.PasswordID) error {
 
 	return fmt.Errorf("no impl")
 }
