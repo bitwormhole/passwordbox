@@ -9,7 +9,7 @@ void PBoxLogger_push(PBoxLogItem *item)
     // todo : impl
 }
 
-void PBoxLogger_push_params(PBoxString tag, PBoxLogLevel level, PBoxTime time, PBoxString msg, PBoxString src)
+void PBoxLogger_push_params(pbox_string tag, PBoxLogLevel level, pbox_time time, pbox_string msg, pbox_string src)
 {
     // todo : impl
 
@@ -23,35 +23,35 @@ void PBoxLogger_push_params(PBoxString tag, PBoxLogLevel level, PBoxTime time, P
     PBoxLogger_push(&item);
 }
 
-void PBoxLogger_trace(PBoxString tag, PBoxString fmt, ...)
+void pbox_log_trace(pbox_string src, pbox_string fmt, ...)
 {
-    // PBoxTime time = 0;
+    // pbox_time time = 0;
     // PBoxLog_push_params(tag, PBoxLogTrace, time, msg, NIL);
 
-    ESP_LOGV(tag, "%s", fmt);
+    ESP_LOGV(src, "%s", fmt);
 }
 
-void PBoxLogger_debug(PBoxString tag, PBoxString fmt, ...)
+void pbox_log_debug(pbox_string src, pbox_string fmt, ...)
 {
-    ESP_LOGD(tag, "%s", fmt);
+    ESP_LOGD(src, "%s", fmt);
 }
 
-void PBoxLogger_info(PBoxString tag, PBoxString fmt, ...)
+void pbox_log_info(pbox_string src, pbox_string fmt, ...)
 {
-    ESP_LOGI(tag, "%s", fmt);
+    ESP_LOGI(src, "%s", fmt);
 }
 
-void PBoxLogger_warn(PBoxString tag, PBoxString fmt, ...)
+void pbox_log_warn(pbox_string src, pbox_string fmt, ...)
 {
-    ESP_LOGW(tag, "%s", fmt);
+    ESP_LOGW(src, "%s", fmt);
 }
 
-void PBoxLogger_error(PBoxString tag, PBoxString fmt, ...)
+void pbox_log_error(pbox_string src, pbox_string fmt, ...)
 {
-    ESP_LOGE(tag, "%s", fmt);
+    ESP_LOGE(src, "%s", fmt);
 }
 
-void PBoxLogger_fatal(PBoxString tag, PBoxString fmt, ...)
+void pbox_log_fatal(pbox_string src, pbox_string fmt, ...)
 {
-    ESP_LOGE(tag, "%s", fmt);
+    ESP_LOGE(src, "%s", fmt);
 }

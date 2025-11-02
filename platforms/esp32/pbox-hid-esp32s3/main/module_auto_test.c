@@ -52,7 +52,7 @@ PBoxError PBoxAutoTestModuleInner_init(PBoxAutoTestModuleInner *self)
 PBoxError PBoxAutoTestModuleInner_on_run(PBoxModuleLifeCallback *callback)
 {
 
-    PBoxLogger_warn("PBoxAutoTestModuleInner_on_run", "callback");
+    pbox_log_warn("PBoxAutoTestModuleInner_on_run", "callback");
 
     return NIL;
 }

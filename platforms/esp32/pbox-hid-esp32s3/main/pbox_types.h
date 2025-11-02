@@ -6,54 +6,56 @@
 
 // int
 
-typedef int PBoxInt;
+typedef int pbox_int;
 
-typedef char PBoxInt8;
-typedef short PBoxInt16;
-typedef long PBoxInt32;
-typedef long long PBoxInt64;
+typedef char pbox_int8;
+typedef short pbox_int16;
+typedef long pbox_int32;
+typedef long long pbox_int64;
 
 // uint
 
-typedef unsigned int PBoxUint;
+typedef unsigned int pbox_uint;
 
-typedef unsigned char PBoxUint8;
-typedef unsigned short PBoxUint16;
-typedef unsigned long PBoxUint32;
-typedef unsigned long long PBoxUint64;
+typedef unsigned char pbox_uint8;
+typedef unsigned short pbox_uint16;
+typedef unsigned long pbox_uint32;
+typedef unsigned long long pbox_uint64;
 
 // float
 
 // others
 
-typedef unsigned char PBoxBool; // 表示 1 个布尔值， （0:false ; 非0:true ）
+typedef unsigned char pbox_bool; // 表示 1 个布尔值， （0:false ; 非0:true ）
 
-typedef unsigned char PBoxByte; // 表示 1 字节
+typedef unsigned char pbox_byte; // 表示 1 字节
 
-typedef char PBoxChar; // 表示 1 字符
+typedef char pbox_char; // 表示 1 字符
 
-typedef int PBoxSize; // 表示数据占用内存的大小，单位是字节
+typedef int pbox_size; // 表示数据占用内存的大小，单位是字节
+
+typedef int pbox_count; // 表示数据单元的个数， 单位是‘个’
 
 // time
 
-typedef PBoxInt64 PBoxTime;     // 时间戳 （unit:ms）
-typedef PBoxInt64 PBoxTimeSpan; // 时间长度（unit:ms）
+typedef pbox_int64 pbox_time;      // 时间戳 （unit:ms）
+typedef pbox_int64 pbox_time_span; // 时间长度（unit:ms）
 
 // array ptr
 
-typedef const unsigned char *PBoxBytes;
+typedef const unsigned char *pbox_bytes;
 
-typedef const char *PBoxString;
+typedef const char *pbox_string;
 
 ////////////////////////////////////////////////////////////////////////////////
 
 // virtual ptr
 
+typedef struct PBoxErrorInfo_t *PBoxError, *pbox_error;
+
 typedef struct PBoxByteBuffer_t PBoxByteBuffer;
 
 typedef struct PBoxStringHolder_t PBoxStringHolder;
-
-typedef struct PBoxError_t *PBoxError;
 
 typedef struct PBoxAutoTestModule_t PBoxAutoTestModule;
 typedef struct PBoxBleModule_t PBoxBleModule;
@@ -71,6 +73,9 @@ typedef struct PBoxApp_t PBoxApp;
 #define YES 1
 #define NO 0
 #define NIL 0
+
+#define PBOX_MIN(a, b) (((a) < (b)) ? (a) : (b))
+#define PBOX_MAX(a, b) (((a) > (b)) ? (a) : (b))
 
 ////////////////////////////////////////////////////////////////////////////////
 

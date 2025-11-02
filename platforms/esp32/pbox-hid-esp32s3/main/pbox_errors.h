@@ -6,35 +6,35 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-typedef struct PBoxError_t
+typedef struct PBoxErrorInfo_t
 {
 
-    PBoxInt code;
+    pbox_int code;
 
-    PBoxString message;
+    pbox_string message;
 
-    PBoxString source;
+    pbox_string source;
 
     PBoxError parent;
 
-} PBoxErrorInfo, *PBoxError;
+} PBoxErrorInfo, *PBoxError, *pbox_error;
 
-PBoxError PBoxError_make(PBoxInt code, PBoxString src, PBoxString msg);
+pbox_error pbox_make_error(pbox_int code, pbox_string src, pbox_string msg);
 
 ////////////////////////////////////////////////////////////////////////////////
 
 typedef struct PBoxErrorHolder_t
 {
-    PBoxBool use1st; // (YES: 保留第一个err; NO:保留最后一个err)
+    pbox_bool use1st; // (YES: 保留第一个err; NO:保留最后一个err)
     PBoxError err;
 
 } PBoxErrorHolder;
 
-void PBoxErrorHolder_init(PBoxErrorHolder *self, PBoxBool use1st);
+void PBoxErrorHolder_init(PBoxErrorHolder *self, pbox_bool use1st);
 
 void PBoxErrorHolder_handle(PBoxErrorHolder *self, PBoxError err);
 
-PBoxBool PBoxErrorHolder_has_error(PBoxErrorHolder *self);
+pbox_bool PBoxErrorHolder_has_error(PBoxErrorHolder *self);
 
 PBoxError PBoxErrorHolder_get_error(PBoxErrorHolder *self);
 

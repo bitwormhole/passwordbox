@@ -219,6 +219,6 @@ void app_main(void)
     PBoxError err = PBoxApp_run(app);
     if (err)
     {
-        PBoxLogger_error(err->source, err->message);
+        pbox_log_error(err->source, err->message);
     }
 }

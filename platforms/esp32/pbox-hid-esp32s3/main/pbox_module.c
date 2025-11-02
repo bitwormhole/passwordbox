@@ -24,8 +24,8 @@ typedef struct PBoxModuleManagerInner_t
 
     PBoxModuleManager *owner;
 
-    PBoxUint capacity;
-    PBoxUint count;
+    pbox_uint capacity;
+    pbox_uint count;
 
     PBoxModuleHolder holders[PBoxModuleManagerInner_capacity];
 
@@ -72,7 +72,7 @@ PBoxError PBoxModuleManager_create(PBoxModuleManager *self)
 {
     if (self == NIL)
     {
-        return PBoxError_make(500, "PBoxModuleManager_create", "self is nil");
+        return pbox_make_error(500, "PBoxModuleManager_create", "self is nil");
     }
 
     if (PBoxModuleManager_is_ready(self))
@@ -84,7 +84,7 @@ PBoxError PBoxModuleManager_create(PBoxModuleManager *self)
         PBoxModuleManager_init(self);
     }
 
-    PBoxSize size = sizeof(PBoxModuleManagerInner);
+    pbox_size size = sizeof(PBoxModuleManagerInner);
     PBoxModuleManagerInner *inner = malloc(size);
     PBoxModuleManagerInner_init(inner);
 
@@ -109,7 +109,7 @@ PBoxError PBoxModuleManager_destroy(PBoxModuleManager *self)
     return NIL;
 }
 
-PBoxBool PBoxModuleManager_is_ready(PBoxModuleManager *self)
+pbox_bool PBoxModuleManager_is_ready(PBoxModuleManager *self)
 {
     if (!self)
     {
@@ -131,7 +131,7 @@ PBoxBool PBoxModuleManager_is_ready(PBoxModuleManager *self)
     return (owner == self);
 }
 
-PBoxModuleIterator *PBoxModuleManager_iterate(PBoxModuleManager *self, PBoxModuleIterator *iter, PBoxBool reverse)
+PBoxModuleIterator *PBoxModuleManager_iterate(PBoxModuleManager *self, PBoxModuleIterator *iter, pbox_bool reverse)
 {
     if ((self == NIL) || (iter == NIL))
     {
@@ -151,12 +151,12 @@ PBoxError PBoxModuleManager_add(PBoxModuleManager *self, PBoxModule *m)
 {
     if (m == NIL)
     {
-        return PBoxError_make(500, "PBoxModuleManager_add", "param:module is nil");
+        return pbox_make_error(500, "PBoxModuleManager_add", "param:module is nil");
     }
 
     if (!PBoxModuleManager_is_ready(self))
     {
-        return PBoxError_make(500, "PBoxModuleManager_add", "manager is not ready");
+        return pbox_make_error(500, "PBoxModuleManager_add", "manager is not ready");
     }
 
     PBoxModuleManagerInner *inner = self->inner;
@@ -172,7 +172,7 @@ PBoxError PBoxModuleManager_add(PBoxModuleManager *self, PBoxModule *m)
         return NIL;
     }
 
-    return PBoxError_make(500, "PBoxModuleManager_add", "manager.array is overflow");
+    return pbox_make_error(500, "PBoxModuleManager_add", "manager.array is overflow");
 }
 
 void PBoxModuleManager_add_with_eh(PBoxModuleManager *self, PBoxModule *m, PBoxErrorHolder *eh)
@@ -234,7 +234,7 @@ PBoxModule *PBoxModuleIterator_next(PBoxModuleIterator *self)
     return NIL;
 }
 
-PBoxBool PBoxModuleIterator_has_more(PBoxModuleIterator *self)
+pbox_bool PBoxModuleIterator_has_more(PBoxModuleIterator *self)
 {
     if (self == NIL)
     {
@@ -304,9 +304,9 @@ PBoxError PBoxModule_invoke_lifecycle_func(PBoxModule *self, PBoxAppContext *ac,
         {
             return NIL;
         }
-        PBoxString sel_str = PBoxModuleLifePhase_stringify(sel);
-        PBoxString mod_name = self->name;
-        PBoxLogger_info("PBoxModule_invoke_lifecycle_func", "invoke: %s@%s", sel_str, mod_name);
+        pbox_string sel_str = PBoxModuleLifePhase_stringify(sel);
+        pbox_string mod_name = self->name;
+        pbox_log_info("PBoxModule_invoke_lifecycle_func", "invoke: %s@%s", sel_str, mod_name);
 
         memset(&callback, 0, sizeof(callback));
         callback.context = ac;
@@ -318,9 +318,9 @@ PBoxError PBoxModule_invoke_lifecycle_func(PBoxModule *self, PBoxAppContext *ac,
     return NIL;
 }
 
-PBoxString PBoxModuleLifePhase_stringify(PBoxModuleLifePhase sel)
+pbox_string PBoxModuleLifePhase_stringify(PBoxModuleLifePhase sel)
 {
-    PBoxString str = "";
+    pbox_string str = "";
     switch (sel)
     {
     case PBoxModuleLifePhaseOnCreate:

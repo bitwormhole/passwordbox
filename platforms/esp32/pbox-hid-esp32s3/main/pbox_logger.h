@@ -4,38 +4,45 @@
 
 #include "pbox_types.h"
 
-typedef int PBoxLogLevel;
+#define PBOX_LOG_TAG "pBox"
 
-const static PBoxLogLevel PBoxLogMin = 0;
-const static PBoxLogLevel PBoxLogTrace = 1;
-const static PBoxLogLevel PBoxLogDebug = 2;
-const static PBoxLogLevel PBoxLogInfo = 3;
-const static PBoxLogLevel PBoxLogWarn = 4;
-const static PBoxLogLevel PBoxLogError = 5;
-const static PBoxLogLevel PBoxLogFatal = 6;
-const static PBoxLogLevel PBoxLogMax = 7;
+typedef enum PBoxLogLevel_t
+{
+
+    PBoxLogLevelMin,
+
+    PBoxLogLevelTrace,
+    PBoxLogLevelDebug,
+    PBoxLogLevelInfo,
+    PBoxLogLevelWarn,
+    PBoxLogLevelError,
+    PBoxLogLevelFatal,
+
+    PBoxLogLevelMax,
+
+} PBoxLogLevel;
 
 typedef struct PBoxLogItem_t
 {
     PBoxLogLevel level;
 
-    PBoxTime time;
+    pbox_time time;
 
-    PBoxString message;
+    pbox_string message;
 
-    PBoxString source;
+    pbox_string source;
 
-    PBoxString tag;
+    pbox_string tag;
 
 } PBoxLogItem;
 
 void PBoxLogger_push(PBoxLogItem *item);
 
-void PBoxLogger_trace(PBoxString tag, PBoxString fmt, ...);
-void PBoxLogger_debug(PBoxString tag, PBoxString fmt, ...);
-void PBoxLogger_info(PBoxString tag, PBoxString fmt, ...);
-void PBoxLogger_warn(PBoxString tag, PBoxString fmt, ...);
-void PBoxLogger_error(PBoxString tag, PBoxString fmt, ...);
-void PBoxLogger_fatal(PBoxString tag, PBoxString fmt, ...);
+void pbox_log_trace(pbox_string src, pbox_string fmt, ...);
+void pbox_log_debug(pbox_string src, pbox_string fmt, ...);
+void pbox_log_info(pbox_string src, pbox_string fmt, ...);
+void pbox_log_warn(pbox_string src, pbox_string fmt, ...);
+void pbox_log_error(pbox_string src, pbox_string fmt, ...);
+void pbox_log_fatal(pbox_string src, pbox_string fmt, ...);
 
 #endif //  __pbox_logger_h__

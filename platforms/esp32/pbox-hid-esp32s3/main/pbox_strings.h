@@ -11,11 +11,12 @@ typedef struct PBoxStringHolder_t
 
     PBoxArray array;
 
-    PBoxString string;
+    pbox_string string;
 
-} PBoxStringHolder;
+} PBoxStringHolder, PBoxStringBuilder, PBoxStringBuffer, PBoxString;
 
-void PBoxStringHolder_init(PBoxStringHolder *self);
-PBoxError PBoxStringHolder_create(PBoxStringHolder *self, PBoxSize len);
+void PBoxStringBuffer_init(PBoxStringBuffer *self);
+
+PBoxError PBoxStringBuffer_create(PBoxStringBuffer *self, pbox_size len);
 
 #endif //  __pbox_strings_h__

@@ -8,12 +8,12 @@
 // {
 // } PBoxExample;
 
-PBoxTime PBoxTime_now();
+pbox_time PBoxTime_now();
 
-PBoxTime PBoxTime_add(PBoxTime t, PBoxTimeSpan span);
+pbox_time PBoxTime_add(pbox_time t, pbox_time_span span);
 
-PBoxTimeSpan PBoxTime_span(PBoxTime t1, PBoxTime t2);
+pbox_time_span PBoxTime_span(pbox_time t1, pbox_time t2);
 
-PBoxTimeSpan PBoxTime_span_abs(PBoxTime t1, PBoxTime t2);
+pbox_time_span PBoxTime_span_abs(pbox_time t1, pbox_time t2);
 
 #endif //  __pbox_time_h__

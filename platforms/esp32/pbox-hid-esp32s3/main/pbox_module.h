@@ -36,15 +36,15 @@ typedef enum PBoxModuleLifePhase_t
 
 } PBoxModuleLifePhase;
 
-PBoxString PBoxModuleLifePhase_stringify(PBoxModuleLifePhase sel);
+pbox_string PBoxModuleLifePhase_stringify(PBoxModuleLifePhase sel);
 
 ////////////////////////////////////////////////////////////////////////////////
 
 typedef struct PBoxModule_t
 {
 
-    PBoxString name;
-    PBoxBool enabled;
+    pbox_string name;
+    pbox_bool enabled;
 
     PBoxModuleLifeFunc on_create;
     PBoxModuleLifeFunc on_start;
@@ -73,7 +73,7 @@ typedef struct PBoxModuleIterator_t
 
     int current;
 
-    PBoxBool reverse;
+    pbox_bool reverse;
 
 } PBoxModuleIterator;
 
@@ -96,7 +96,7 @@ PBoxError PBoxModule_invoke_lifecycle_func(PBoxModule *self, PBoxAppContext *ac,
 
 PBoxModule *PBoxModuleIterator_next(PBoxModuleIterator *self);
 
-PBoxBool PBoxModuleIterator_has_more(PBoxModuleIterator *self);
+pbox_bool PBoxModuleIterator_has_more(PBoxModuleIterator *self);
 
 ////////////////////////////////////////////////////////////////////////////////
 // func of PBoxModuleManager
@@ -107,13 +107,13 @@ PBoxError PBoxModuleManager_create(PBoxModuleManager *self);
 
 PBoxError PBoxModuleManager_destroy(PBoxModuleManager *self);
 
-PBoxBool PBoxModuleManager_is_ready(PBoxModuleManager *self);
+pbox_bool PBoxModuleManager_is_ready(PBoxModuleManager *self);
 
 PBoxError PBoxModuleManager_add(PBoxModuleManager *self, PBoxModule *m);
 
 void PBoxModuleManager_add_with_eh(PBoxModuleManager *self, PBoxModule *m, PBoxErrorHolder *eh);
 
-PBoxModuleIterator *PBoxModuleManager_iterate(PBoxModuleManager *self, PBoxModuleIterator *iter, PBoxBool reverse);
+PBoxModuleIterator *PBoxModuleManager_iterate(PBoxModuleManager *self, PBoxModuleIterator *iter, pbox_bool reverse);
 
 ////////////////////////////////////////////////////////////////////////////////
 

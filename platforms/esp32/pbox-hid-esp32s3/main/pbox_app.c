@@ -24,7 +24,7 @@ PBoxError PBoxApp_on_pause(PBoxApp *app);
 PBoxError PBoxApp_on_stop(PBoxApp *app);
 PBoxError PBoxApp_on_destroy(PBoxApp *app);
 
-PBoxError PBoxApp_invoke_lifecycle_func(PBoxApp *app, PBoxModuleLifePhase sel, PBoxBool reverse);
+PBoxError PBoxApp_invoke_lifecycle_func(PBoxApp *app, PBoxModuleLifePhase sel, pbox_bool reverse);
 
 PBoxError PBoxApp_prepare_modules(PBoxApp *app);
 PBoxError PBoxApp_prepare_app_context(PBoxApp *app);
@@ -86,7 +86,7 @@ PBoxError PBoxApp_on_init(PBoxApp *app)
 {
     if (app == NIL)
     {
-        return PBoxError_make(500, "PBoxApp_on_init", "param:app is nil");
+        return pbox_make_error(500, "PBoxApp_on_init", "param:app is nil");
     }
 
     memset(app, 0, sizeof(app[0]));
@@ -118,7 +118,7 @@ PBoxError PBoxApp_on_create(PBoxApp *app)
     // invoke modules
 
     PBoxModuleLifePhase sel = PBoxModuleLifePhaseOnCreate;
-    PBoxBool reverse = NO;
+    pbox_bool reverse = NO;
     return PBoxApp_invoke_lifecycle_func(app, sel, reverse);
 }
 
@@ -126,35 +126,35 @@ PBoxError PBoxApp_on_start(PBoxApp *app)
 {
 
     PBoxModuleLifePhase sel = PBoxModuleLifePhaseOnStart;
-    PBoxBool reverse = NO;
+    pbox_bool reverse = NO;
     return PBoxApp_invoke_lifecycle_func(app, sel, reverse);
 }
 
 PBoxError PBoxApp_on_resume(PBoxApp *app)
 {
     PBoxModuleLifePhase sel = PBoxModuleLifePhaseOnResume;
-    PBoxBool reverse = NO;
+    pbox_bool reverse = NO;
     return PBoxApp_invoke_lifecycle_func(app, sel, reverse);
 }
 
 PBoxError PBoxApp_on_run(PBoxApp *app)
 {
     PBoxModuleLifePhase sel = PBoxModuleLifePhaseOnRun;
-    PBoxBool reverse = NO;
+    pbox_bool reverse = NO;
     return PBoxApp_invoke_lifecycle_func(app, sel, reverse);
 }
 
 PBoxError PBoxApp_on_pause(PBoxApp *app)
 {
     PBoxModuleLifePhase sel = PBoxModuleLifePhaseOnPause;
-    PBoxBool reverse = YES;
+    pbox_bool reverse = YES;
     return PBoxApp_invoke_lifecycle_func(app, sel, reverse);
 }
 
 PBoxError PBoxApp_on_stop(PBoxApp *app)
 {
     PBoxModuleLifePhase sel = PBoxModuleLifePhaseOnStop;
-    PBoxBool reverse = YES;
+    pbox_bool reverse = YES;
     return PBoxApp_invoke_lifecycle_func(app, sel, reverse);
 }
 
@@ -162,7 +162,7 @@ PBoxError PBoxApp_on_destroy(PBoxApp *app)
 {
     // invoke modules
     PBoxModuleLifePhase sel = PBoxModuleLifePhaseOnDestroy;
-    PBoxBool reverse = YES;
+    pbox_bool reverse = YES;
     PBoxError err = PBoxApp_invoke_lifecycle_func(app, sel, reverse);
     if (err)
     {
@@ -171,7 +171,7 @@ PBoxError PBoxApp_on_destroy(PBoxApp *app)
     return NIL;
 }
 
-PBoxError PBoxApp_invoke_lifecycle_func(PBoxApp *app, PBoxModuleLifePhase sel, PBoxBool reverse)
+PBoxError PBoxApp_invoke_lifecycle_func(PBoxApp *app, PBoxModuleLifePhase sel, pbox_bool reverse)
 {
     PBoxModuleManager *mm = &app->inner->module_manager;
     PBoxAppContext *ac = app->inner->context;
@@ -281,7 +281,7 @@ PBoxError PBoxApp_run(PBoxApp *app)
 {
     if (app == NIL)
     {
-        return PBoxError_make(500, "PBoxApp_run", "param:app is nil");
+        return pbox_make_error(500, "PBoxApp_run", "param:app is nil");
     }
 
     PBoxError err = PBoxApp_on_init(app);

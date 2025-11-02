@@ -24,8 +24,8 @@ typedef struct PBoxErrorPool_t
 
     PBoxErrorHolder2 holders[PBoxErrorPool_capacity];
 
-    PBoxUint count;
-    PBoxUint capacity;
+    pbox_uint count;
+    pbox_uint capacity;
 
 } PBoxErrorPool;
 
@@ -45,7 +45,7 @@ PBoxErrorPool *PBoxErrorPool_get_instance()
     PBoxErrorPool *pool = PBoxErrorPool_the_instance;
     if (pool == NIL)
     {
-        PBoxSize size = sizeof(PBoxErrorPool);
+        pbox_size size = sizeof(PBoxErrorPool);
         pool = malloc(size);
         PBoxErrorPool_init(pool);
         PBoxErrorPool_the_instance = pool;
@@ -67,8 +67,8 @@ PBoxErrorHolder2 *PBoxErrorPool_get_next_holder(PBoxErrorPool *self)
     if (self)
     {
         self->count++;
-        PBoxUint index = self->count;
-        PBoxUint capacity = self->capacity;
+        pbox_uint index = self->count;
+        pbox_uint capacity = self->capacity;
         PBoxErrorHolder2 *holder = self->holders + (index % capacity);
         return holder;
     }
@@ -78,7 +78,7 @@ PBoxErrorHolder2 *PBoxErrorPool_get_next_holder(PBoxErrorPool *self)
 ////////////////////////////////////////////////////////////////////////////////
 // impl: PBoxErrorHolder
 
-void PBoxErrorHolder_init(PBoxErrorHolder *self, PBoxBool use1st)
+void PBoxErrorHolder_init(PBoxErrorHolder *self, pbox_bool use1st)
 {
     if (self)
     {
@@ -102,7 +102,7 @@ void PBoxErrorHolder_handle(PBoxErrorHolder *self, PBoxError err)
     self->err = err;
 }
 
-PBoxBool PBoxErrorHolder_has_error(PBoxErrorHolder *self)
+pbox_bool PBoxErrorHolder_has_error(PBoxErrorHolder *self)
 {
     PBoxError err = PBoxErrorHolder_get_error(self);
     return (err ? YES : NO);
@@ -120,7 +120,7 @@ PBoxError PBoxErrorHolder_get_error(PBoxErrorHolder *self)
 ////////////////////////////////////////////////////////////////////////////////
 // api: error
 
-PBoxError PBoxError_make(PBoxInt code, PBoxString src, PBoxString msg)
+pbox_error pbox_make_error(pbox_int code, pbox_string src, pbox_string msg)
 {
     PBoxErrorPool *pool = PBoxErrorPool_get_instance();
     PBoxErrorHolder2 *holder = PBoxErrorPool_get_next_holder(pool);

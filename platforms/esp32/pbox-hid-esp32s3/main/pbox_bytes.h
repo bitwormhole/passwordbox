@@ -10,7 +10,7 @@ typedef struct PBoxByteBuffer_t
 
     PBoxArray array;
 
-    PBoxByte *head;
+    pbox_byte *head;
 
 } PBoxByteBuffer;
 
@@ -18,7 +18,7 @@ typedef struct PBoxByteBuffer_t
 
 void PBoxByteBuffer_init(PBoxByteBuffer *self);
 
-PBoxBool PBoxByteBuffer_has_init(PBoxByteBuffer *self);
+pbox_bool PBoxByteBuffer_has_init(PBoxByteBuffer *self);
 
 ////////////////////////////////////////////////////////////////////////////////
 
