@@ -1,19 +1,11 @@
 package main
 
 import (
-	"os"
-
-	"github.com/bitwormhole/passwordbox"
-	"github.com/starter-go/starter"
+	"fmt"
 )
 
 func main() {
 
-	a := os.Args
-	m := passwordbox.Module()
-	i := starter.Init(a)
+	fmt.Println("hello, pbox main")
 
-	i.MainModule(m)
-
-	i.WithPanic(true).Run()
 }

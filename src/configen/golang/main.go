@@ -1,11 +1,10 @@
 package main
 
 import (
-	"os"
-
-	"github.com/starter-go/starter"
+	"fmt"
 )
 
 func main() {
-	starter.Configen(os.Args)
+	// starter.Configen(os.Args)
+	fmt.Println("hello, configen pbox")
 }
