@@ -1,0 +1,32 @@
+package components
+
+import "github.com/bitwormhole/passwordbox/core/data/properties"
+
+////////////////////////////////////////////////////////////////////////////////
+
+type Context interface {
+	GetProperties() properties.Table
+
+	GetComponents() ComponentManager
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+type ContextFactory interface {
+	Create(b *ContextBuilder) (Context, error)
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+type ContextBuilder struct {
+	Registry   Registry
+	Properties properties.Table
+	Factory    ContextFactory
+}
+
+func (inst *ContextBuilder) Build() (Context, error) {
+	f := inst.Factory
+	return f.Create(inst)
+}
+
+////////////////////////////////////////////////////////////////////////////////

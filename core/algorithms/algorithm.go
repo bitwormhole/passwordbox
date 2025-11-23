@@ -1,0 +1,41 @@
+package algorithms
+
+////////////////////////////////////////////////////////////////////////////////
+
+type AlgorithmName string
+
+const (
+	AlgorithmMD5    AlgorithmName = "MD5"
+	AlgorithmSHA1   AlgorithmName = "SHA1"
+	AlgorithmSHA256 AlgorithmName = "SHA256"
+
+	AlgorithmRSA AlgorithmName = "RSA"
+
+	AlgorithmAES AlgorithmName = "AES"
+)
+
+////////////////////////////////////////////////////////////////////////////////
+
+type AlgorithmType string
+
+const (
+	TypeHash      AlgorithmType = "Hash"
+	TypePublicKey AlgorithmType = "PublicKey"
+	TypeSecretKey AlgorithmType = "SecretKey"
+)
+
+////////////////////////////////////////////////////////////////////////////////
+
+type Driver interface {
+	AlgorithmName() AlgorithmName
+
+	AlgorithmType() AlgorithmType
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+type DriverManager interface {
+	GetDriver(name AlgorithmName) (Driver, error)
+}
+
+////////////////////////////////////////////////////////////////////////////////
