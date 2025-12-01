@@ -1,18 +1,23 @@
 package pemapi
 
-type StringHandlerFunc func(request string) (response string)
+type API interface {
 
-type TextHandlerFunc func(request RequestText) (response ResponseText)
+	// 这是 'ExecuteMessage' 的别名
+	Execute(request *Request, response *Response) error
 
-type MessageHandlerFunc func(request *Request, response *Response) error
+	ExecuteString(request string) (response string)
 
-type ContextHandlerFunc func(c *Context) error
+	ExecuteText(request RequestText) (response ResponseText)
 
-type API struct {
-	StringHandler  StringHandlerFunc
-	TextHandler    TextHandlerFunc
-	MessageHandler MessageHandlerFunc
-	ContextHandler ContextHandlerFunc
+	ExecuteMessage(request *Request, response *Response) error
+
+	ExecuteContext(c *Context) error
+
+	// StringHandler  StringHandlerFunc
+	// TextHandler    TextHandlerFunc
+	// MessageHandler MessageHandlerFunc
+	// ContextHandler ContextHandlerFunc
+
 }
 
-type HandlerFunc = ContextHandlerFunc
+// type HandlerFunc = ContextHandlerFunc

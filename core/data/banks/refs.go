@@ -17,6 +17,6 @@ type RefHolder interface {
 }
 
 type Ref struct {
-	Name Refname
-	To   ObjectID
+	Name   Refname
+	Target ObjectID
 }

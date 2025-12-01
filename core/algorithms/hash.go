@@ -3,10 +3,10 @@ package algorithms
 type HashDriver interface {
 	Driver
 
-	NewComputer() HashComputer
+	New() Hash
 }
 
-type HashComputer interface {
+type Hash interface {
 	GetDriver() HashDriver
 
 	Sum(data []byte) []byte

@@ -18,7 +18,7 @@ func TestPEMAPI(t *testing.T) {
 	ctx.Response = resp
 
 	req.Method = http.MethodGet
-	req.Path = "/test/mock-1"
+	req.SetLocation("pemapi://user@host/test/mock-1")
 	req.SetHeader("x-foo", "a header named 'foo'")
 	req.SetHeader("x-bar", "a header named 'bar'")
 	req.Query = map[string]string{
@@ -35,7 +35,7 @@ func TestPEMAPI(t *testing.T) {
 	content := "hello, PEM-API"
 	req.Bytes = []byte(content)
 
-	err := api.ContextHandler(ctx)
+	err := api.ExecuteContext(ctx)
 	if err == nil {
 		t.Log("OK")
 	} else {

@@ -2,25 +2,54 @@ package pemapi
 
 type Handler interface {
 	Handle(c *Context) error
+}
+
+type HandlerExt interface {
+	Handler
 
 	ListRegistrations() []*HandlerRegistration
 }
+
+type HandlerFunc func(c *Context) error
 
 type HandlerRegistration struct {
 	Name     string
 	Method   string
 	Path     string
-	Handler  HandlerFunc
 	Priority int
 	Enabled  bool
+
+	Handler Handler
+	Filter  Filter
 }
 
 type HandlerRegistry interface {
 	Register(info *HandlerRegistration)
 
-	RegisterHandler(h Handler)
+	RegisterHandler(h HandlerExt)
 
 	ListAll() []*HandlerRegistration
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+type HandlerHolder struct {
+	Key     HandlerKey
+	Handler Handler
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+type HandlerAdapter struct {
+	Fn HandlerFunc
+}
+
+func (inst *HandlerAdapter) Handle(c *Context) error {
+	return inst.Fn(c)
+}
+
+func (inst *HandlerAdapter) _impl() Handler {
+	return inst
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -40,7 +69,7 @@ func (i *innerHandlerRegistry) ListAll() []*HandlerRegistration {
 	return i.all
 }
 
-func (i *innerHandlerRegistry) RegisterHandler(h Handler) {
+func (i *innerHandlerRegistry) RegisterHandler(h HandlerExt) {
 	if h == nil {
 		return
 	}

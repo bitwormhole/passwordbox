@@ -5,22 +5,22 @@ import (
 	"strings"
 )
 
-func Encode(t *Table) []byte {
+func Encode(t Table) []byte {
 	encoder := new(innerEncoder)
 	return encoder.encodeBin(t)
 }
 
-func Format(t *Table) string {
+func Format(t Table) string {
 	encoder := new(innerEncoder)
 	return encoder.encodeStr(t)
 }
 
-func Decode(raw []byte, t *Table) error {
+func Decode(raw []byte, t Table) error {
 	decoder := new(innerDecoder)
 	return decoder.decodeBin(raw, t)
 }
 
-func Parse(raw string, t *Table) error {
+func Parse(raw string, t Table) error {
 	decoder := new(innerDecoder)
 	return decoder.decodeStr(raw, t)
 }
@@ -30,12 +30,12 @@ func Parse(raw string, t *Table) error {
 type innerEncoder struct {
 }
 
-func (inst *innerEncoder) encodeBin(t *Table) []byte {
+func (inst *innerEncoder) encodeBin(t Table) []byte {
 	str := inst.encodeStr(t)
 	return []byte(str)
 }
 
-func (inst *innerEncoder) encodeStr(t *Table) string {
+func (inst *innerEncoder) encodeStr(t Table) string {
 	builder := new(strings.Builder)
 	keys := t.Keys()
 	for _, key := range keys {
@@ -53,12 +53,12 @@ func (inst *innerEncoder) encodeStr(t *Table) string {
 type innerDecoder struct {
 }
 
-func (inst *innerDecoder) decodeBin(b []byte, out *Table) error {
+func (inst *innerDecoder) decodeBin(b []byte, out Table) error {
 	str := string(b)
 	return inst.decodeStr(str, out)
 }
 
-func (inst *innerDecoder) decodeStr(str string, out *Table) error {
+func (inst *innerDecoder) decodeStr(str string, out Table) error {
 	if out == nil {
 		return fmt.Errorf("param: out is nil")
 	}

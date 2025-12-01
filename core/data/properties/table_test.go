@@ -125,12 +125,12 @@ func TestParseTable(t *testing.T) {
 type innerTableTester struct {
 }
 
-func (inst *innerTableTester) createNewTable() *Table {
+func (inst *innerTableTester) createNewTable() Table {
 	table := NewTable()
 	return table
 }
 
-func (inst *innerTableTester) createNewTableWithData() *Table {
+func (inst *innerTableTester) createNewTableWithData() Table {
 
 	src := make(map[string]string)
 
@@ -151,7 +151,7 @@ func (inst *innerTableTester) createNewTableWithData() *Table {
 	return table
 }
 
-func (inst *innerTableTester) logItems(tag string, table *Table, t *testing.T) {
+func (inst *innerTableTester) logItems(tag string, table Table, t *testing.T) {
 	str := Format(table)
 	t.Logf("%s\n%s", tag, str)
 }

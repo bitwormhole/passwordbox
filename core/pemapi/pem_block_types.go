@@ -5,8 +5,10 @@ import "strings"
 type BlockType string
 
 const (
-	BlockTypeRequest  BlockType = "PEMAPI REQUEST"
-	BlockTypeResponse BlockType = "PEMAPI RESPONSE"
+	BlockTypeRequest     BlockType = "PEMAPI REQUEST"
+	BlockTypeResponse    BlockType = "PEMAPI RESPONSE"
+	BlockTypeEnvironment BlockType = "ENVIRONMENT"
+	BlockTypeProperties  BlockType = "PROPERTIES"
 )
 
 func (bt BlockType) String() string {

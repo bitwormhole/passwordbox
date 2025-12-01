@@ -2,20 +2,42 @@ package properties
 
 import "sort"
 
-type Table struct {
+////////////////////////////////////////////////////////////////////////////////
+
+type Table interface {
+	Put(name, value string)
+
+	Get(name string) string
+
+	Keys() []string
+
+	Reset()
+
+	Trim()
+
+	Count() int
+
+	Import(map[string]string)
+
+	Export(out map[string]string) map[string]string
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+type innerTable struct {
 	tab map[string]string
 }
 
-func NewTable() *Table {
-	return new(Table)
+func NewTable() Table {
+	return new(innerTable)
 }
 
-func (inst *Table) Put(name, value string) {
+func (inst *innerTable) Put(name, value string) {
 	tab := inst.innerGetRawTable(true)
 	tab[name] = value
 }
 
-func (inst *Table) Get(name string) string {
+func (inst *innerTable) Get(name string) string {
 	tab := inst.innerGetRawTable(false)
 	if tab == nil {
 		return ""
@@ -23,7 +45,7 @@ func (inst *Table) Get(name string) string {
 	return tab[name]
 }
 
-func (inst *Table) Keys() []string {
+func (inst *innerTable) Keys() []string {
 	dst := make([]string, 0)
 	src := inst.innerGetRawTable(false)
 	for key := range src {
@@ -33,11 +55,11 @@ func (inst *Table) Keys() []string {
 	return dst
 }
 
-func (inst *Table) Reset() {
+func (inst *innerTable) Reset() {
 	inst.tab = make(map[string]string)
 }
 
-func (inst *Table) Trim() {
+func (inst *innerTable) Trim() {
 	dst := make(map[string]string)
 	src := inst.innerGetRawTable(false)
 	for key, value := range src {
@@ -49,12 +71,12 @@ func (inst *Table) Trim() {
 	inst.tab = dst
 }
 
-func (inst *Table) Count() int {
+func (inst *innerTable) Count() int {
 	count := len(inst.tab)
 	return count
 }
 
-func (inst *Table) Import(src map[string]string) {
+func (inst *innerTable) Import(src map[string]string) {
 	dst := inst.innerGetRawTable(true)
 	for key, value := range src {
 		if value == "" {
@@ -65,7 +87,7 @@ func (inst *Table) Import(src map[string]string) {
 	inst.tab = dst
 }
 
-func (inst *Table) Export(dst map[string]string) map[string]string {
+func (inst *innerTable) Export(dst map[string]string) map[string]string {
 	if dst == nil {
 		dst = make(map[string]string)
 	}
@@ -79,7 +101,7 @@ func (inst *Table) Export(dst map[string]string) map[string]string {
 	return dst
 }
 
-func (inst *Table) innerGetRawTable(create bool) map[string]string {
+func (inst *innerTable) innerGetRawTable(create bool) map[string]string {
 	tab := inst.tab
 	if create {
 		if tab == nil {
@@ -89,3 +111,5 @@ func (inst *Table) innerGetRawTable(create bool) map[string]string {
 	}
 	return tab
 }
+
+////////////////////////////////////////////////////////////////////////////////

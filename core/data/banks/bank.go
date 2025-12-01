@@ -19,6 +19,8 @@ type Bank interface {
 
 	Delete() error
 
+	Open() (Session, error)
+
 	Exists() bool
 }
 

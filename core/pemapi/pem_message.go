@@ -7,7 +7,8 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
-	"time"
+
+	"github.com/bitwormhole/passwordbox/core/data/dxo"
 )
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -20,10 +21,39 @@ type ResponseText MessageText
 
 ////////////////////////////////////////////////////////////////////////////////
 
+func MakeMessageText(str string) MessageText {
+	return MessageText(str)
+}
+
+func MakeRequestText(str string) RequestText {
+	return RequestText(str)
+}
+
+func MakeResponseText(str string) ResponseText {
+	return ResponseText(str)
+}
+
+func (txt MessageText) String() string {
+	return string(txt)
+}
+
+func (txt RequestText) String() string {
+	return string(txt)
+}
+
+func (txt ResponseText) String() string {
+	return string(txt)
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 // Message 表示 一条 pemapi 消息, 它的格式类似于一个完整的 PEM 文件, 由若干个 pem.block 组成
 type Message struct {
+
+	// data of block[0]
 	pem.Block
 
+	// list all blocks
 	raw []*pem.Block
 }
 
@@ -38,6 +68,17 @@ func (inst *Message) innerGetHeaders(create bool) map[string]string {
 	return table
 }
 
+func (inst *Message) innerGetBlockID(b *pem.Block) string {
+	if b == nil {
+		return ""
+	}
+	headers := b.Headers
+	if headers == nil {
+		return ""
+	}
+	return headers["id"]
+}
+
 func (inst *Message) GetHeader(name string) string {
 	t := inst.innerGetHeaders(false)
 	if t == nil {
@@ -48,6 +89,7 @@ func (inst *Message) GetHeader(name string) string {
 
 func (inst *Message) SetHeader(name, value string) {
 
+	name = strings.ToLower(name)
 	name = strings.TrimSpace(name)
 	value = strings.TrimSpace(value)
 
@@ -68,35 +110,37 @@ func (inst *Message) SetContentLength(length int) {
 	inst.SetHeader("content-length", value)
 }
 
-func (inst *Message) Encode() ([]byte, error) {
-	all := inst.raw
-	codec := new(CODEC)
-	return codec.encodePemDoc(all)
-}
+// 使用 'CODEC' 代替:
 
-func (inst *Message) Decode(data []byte) error {
-	codec := new(CODEC)
-	blist, err := codec.decodePemDoc(data)
-	if err != nil {
-		return err
-	}
-	inst.raw = blist
-	return nil
-}
+// func (inst *Message) Encode() ([]byte, error) {
+// 	all := inst.raw
+// 	codec := new(CODEC)
+// 	return codec.encodePemDoc(all)
+// }
 
-func (inst *Message) EncodeString() (string, error) {
-	bin, err := inst.Encode()
-	if err != nil {
-		return "", err
-	}
-	str := string(bin)
-	return str, nil
-}
+// func (inst *Message) Decode(data []byte) error {
+// 	codec := new(CODEC)
+// 	blist, err := codec.decodePemDoc(data)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	inst.raw = blist
+// 	return nil
+// }
 
-func (inst *Message) DecodeString(data string) error {
-	bin := []byte(data)
-	return inst.Decode(bin)
-}
+// func (inst *Message) EncodeString() (string, error) {
+// 	bin, err := inst.Encode()
+// 	if err != nil {
+// 		return "", err
+// 	}
+// 	str := string(bin)
+// 	return str, nil
+// }
+
+// func (inst *Message) DecodeString(data string) error {
+// 	bin := []byte(data)
+// 	return inst.Decode(bin)
+// }
 
 func (inst *Message) AddBlock(b *pem.Block) {
 	if b == nil {
@@ -130,15 +174,14 @@ func (inst *Message) RemoveRepeatedBlocks() {
 	inst.raw = dst
 }
 
-func (inst *Message) innerGetBlockID(b *pem.Block) string {
-	if b == nil {
-		return ""
-	}
-	headers := b.Headers
-	if headers == nil {
-		return ""
-	}
-	return headers["id"]
+func (inst *Message) ListBlocks() []*pem.Block {
+	return inst.raw
+}
+
+func (inst *Message) Reset() {
+	b0 := new(pem.Block)
+	inst.Block = *b0
+	inst.raw = nil
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -182,122 +225,149 @@ type Request struct {
 	// Message.Type = "PEMAPI REQUEST"
 	Message
 
-	Method string
-	Path   string
-	Query  map[string]string
-	Params map[string]string
+	Method   string
+	Location *url.URL
+
+	PathHave string // 匹配所得的路径
+	PathWant string // = Location.Path
+	User     string // = Location.User
+	Host     string // = Location.Host
+	Protocol string // = Location.Scheme
+
+	Query       map[string]string // = Location.Query
+	Params      map[string]string // = Location.Path_params
+	Environment map[string]string // @block(Environment)
+	Properties  map[string]string // @block(Properties)
+
+	// user@host = 目标 bank 的名称
+	Bank dxo.EmailAddress
 }
 
-func (inst *Request) Text() RequestText {
-
-	b1 := inst.innerMakeRequestBlock()
-	inst.AddBlock(b1)
-	inst.RemoveRepeatedBlocks()
-
-	str, err := inst.Message.EncodeString()
-	if err != nil {
-		str = err.Error()
-	}
-	return RequestText(str)
-}
-
-func (inst *Request) innerMakeRawQuery(src map[string]string, dst *url.URL) {
-
-	sep := ""
-	builder := new(strings.Builder)
-
-	for k, v := range src {
-		builder.WriteString(sep)
-		builder.WriteString(k)
-		builder.WriteString("=")
-		builder.WriteString(v)
-		sep = "&"
-	}
-
-	dst.RawQuery = builder.String()
-}
-
-func (inst *Request) innerMakeRequestBlock() *pem.Block {
-
-	query := inst.Query
-	params := inst.Params
-	body := inst.Bytes
-	u1 := new(url.URL)
-	u2 := new(url.URL) // for params
-
-	u1.Path = inst.Path
-	inst.innerMakeRawQuery(query, u1)
-	inst.innerMakeRawQuery(params, u2)
-
-	inst.SetHeader("method", inst.Method)
-	inst.SetHeader("url", u1.String())
-	inst.SetHeader("params", u2.String())
-	inst.SetHeader("id", "request")
-	inst.SetContentLength(len(body))
-
-	inst.Block.Type = BlockTypeRequest.String()
-	block := new(pem.Block)
-	*block = inst.Block
-
-	return block
-}
-
-func (inst *Request) innerGetQueryMap(u *url.URL) map[string]string {
-	src := u.Query()
-	dst := make(map[string]string)
-	for name, values := range src {
-		for _, val := range values {
-			dst[name] = val
-		}
-	}
-	return dst
-}
-
-func (inst *Request) Parse(txt RequestText) error {
-
-	const wantType = BlockTypeRequest
-
-	str := txt.String()
-	bin := []byte(str)
-	err := inst.Message.Decode(bin)
+func (inst *Request) SetLocation(location string) error {
+	u, err := url.Parse(location)
 	if err != nil {
 		return err
 	}
-
-	blist := inst.raw
-	var b1 *pem.Block = nil
-
-	for _, item := range blist {
-		if wantType.EqualString(item.Type) {
-			b1 = item
-			break
-		}
-	}
-
-	if b1 == nil {
-		return fmt.Errorf("no pem-block with type: '%s'", wantType.String())
-	}
-
-	inst.Block = *b1
-	inst.raw = blist
-
-	inst.Method = inst.GetHeader("method")
-	strURL := inst.GetHeader("url")
-	strParams := inst.GetHeader("params")
-
-	u1, err := url.Parse(strURL)
-	if err == nil {
-		inst.Path = u1.Path
-		inst.Query = inst.innerGetQueryMap(u1)
-	}
-
-	u2, err := url.Parse(strParams)
-	if err == nil {
-		inst.Params = inst.innerGetQueryMap(u2)
-	}
-
+	inst.Location = u
 	return nil
 }
+
+// [弃用]
+
+// func (inst *Request) Text() RequestText {
+
+// 	b1 := inst.innerMakeRequestBlock()
+// 	inst.AddBlock(b1)
+// 	inst.RemoveRepeatedBlocks()
+
+// 	str, err := inst.Message.EncodeString()
+// 	if err != nil {
+// 		str = err.Error()
+// 	}
+// 	return RequestText(str)
+// }
+
+// [弃用]
+// func (inst *Request) innerMakeRawQuery(src map[string]string, dst *url.URL) {
+
+// 	sep := ""
+// 	builder := new(strings.Builder)
+
+// 	for k, v := range src {
+// 		builder.WriteString(sep)
+// 		builder.WriteString(k)
+// 		builder.WriteString("=")
+// 		builder.WriteString(v)
+// 		sep = "&"
+// 	}
+
+// 	dst.RawQuery = builder.String()
+// }
+
+// [弃用]
+// func (inst *Request) innerMakeRequestBlock() *pem.Block {
+
+// 	query := inst.Query
+// 	params := inst.Params
+// 	body := inst.Bytes
+// 	u1 := new(url.URL)
+// 	u2 := new(url.URL) // for params
+
+// 	u1.Path = inst.PathWant
+// 	inst.innerMakeRawQuery(query, u1)
+// 	inst.innerMakeRawQuery(params, u2)
+
+// 	inst.SetHeader("method", inst.Method)
+// 	inst.SetHeader("url", u1.String())
+// 	inst.SetHeader("params", u2.String())
+// 	inst.SetHeader("id", "request")
+// 	inst.SetContentLength(len(body))
+
+// 	inst.Block.Type = BlockTypeRequest.String()
+// 	block := new(pem.Block)
+// 	*block = inst.Block
+
+// 	return block
+// }
+
+// [弃用]
+// func (inst *Request) innerGetQueryMap(u *url.URL) map[string]string {
+// 	src := u.Query()
+// 	dst := make(map[string]string)
+// 	for name, values := range src {
+// 		for _, val := range values {
+// 			dst[name] = val
+// 		}
+// 	}
+// 	return dst
+// }
+
+// [弃用]
+// func (inst *Request) Parse(txt RequestText) error {
+
+// 	const wantType = BlockTypeRequest
+
+// 	str := txt.String()
+// 	bin := []byte(str)
+// 	err := inst.Message.Decode(bin)
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	blist := inst.raw
+// 	var b1 *pem.Block = nil
+
+// 	for _, item := range blist {
+// 		if wantType.EqualString(item.Type) {
+// 			b1 = item
+// 			break
+// 		}
+// 	}
+
+// 	if b1 == nil {
+// 		return fmt.Errorf("no pem-block with type: '%s'", wantType.String())
+// 	}
+
+// 	inst.Block = *b1
+// 	inst.raw = blist
+
+// 	inst.Method = inst.GetHeader("method")
+// 	strURL := inst.GetHeader("url")
+// 	strParams := inst.GetHeader("params")
+
+// 	u1, err := url.Parse(strURL)
+// 	if err == nil {
+// 		inst.PathWant = u1.Path
+// 		inst.Query = inst.innerGetQueryMap(u1)
+// 	}
+
+// 	u2, err := url.Parse(strParams)
+// 	if err == nil {
+// 		inst.Params = inst.innerGetQueryMap(u2)
+// 	}
+
+// 	return nil
+// }
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -310,96 +380,88 @@ type Response struct {
 	Error  error
 }
 
-func (inst *Response) Text() ResponseText {
+// [弃用]
+// func (inst *Response) Text() ResponseText {
 
-	b1 := inst.innerMakeResponseBlock()
-	inst.AddBlock(b1)
-	inst.RemoveRepeatedBlocks()
+// 	b1 := inst.innerMakeResponseBlock()
+// 	inst.AddBlock(b1)
+// 	inst.RemoveRepeatedBlocks()
 
-	str, err := inst.EncodeString()
-	if err != nil {
-		str = err.Error()
-	}
+// 	str, err := inst.EncodeString()
+// 	if err != nil {
+// 		str = err.Error()
+// 	}
 
-	return ResponseText(str)
-}
+// 	return ResponseText(str)
+// }
 
-func (inst *Response) innerMakeResponseBlock() *pem.Block {
+// [弃用]
+// func (inst *Response) innerMakeResponseBlock() *pem.Block {
 
-	now := time.Now()
-	tstamp := now.UnixMilli()
-	status := inst.Status
-	body := inst.Bytes
-	err := inst.Error
+// 	now := time.Now()
+// 	tstamp := now.UnixMilli()
+// 	status := inst.Status
+// 	body := inst.Bytes
+// 	err := inst.Error
 
-	if err != nil {
-		status.Code = http.StatusInternalServerError
-		inst.SetHeader("error", err.Error())
-	}
-	if status.Code == 0 {
-		status.Code = http.StatusOK
-	}
+// 	if err != nil {
+// 		status.Code = http.StatusInternalServerError
+// 		inst.SetHeader("error", err.Error())
+// 	}
+// 	if status.Code == 0 {
+// 		status.Code = http.StatusOK
+// 	}
 
-	inst.SetHeader("status", status.String())
-	inst.SetHeader("date", now.String())
-	inst.SetHeader("timestamp", strconv.FormatInt(tstamp, 10))
-	inst.SetHeader("id", "response")
-	inst.SetContentLength(len(body))
+// 	inst.SetHeader("status", status.String())
+// 	inst.SetHeader("date", now.String())
+// 	inst.SetHeader("timestamp", strconv.FormatInt(tstamp, 10))
+// 	inst.SetHeader("id", "response")
+// 	inst.SetContentLength(len(body))
 
-	block := new(pem.Block)
-	*block = inst.Block
-	block.Type = BlockTypeResponse.String()
-	return block
-}
+// 	block := new(pem.Block)
+// 	*block = inst.Block
+// 	block.Type = BlockTypeResponse.String()
+// 	return block
+// }
 
-func (inst *Response) Parse(txt ResponseText) error {
+// [弃用]
+// func (inst *Response) Parse(txt ResponseText) error {
 
-	const wantType = BlockTypeResponse
+// 	const wantType = BlockTypeResponse
 
-	str := txt.String()
-	err := inst.Message.DecodeString(str)
-	if err != nil {
-		return err
-	}
+// 	str := txt.String()
+// 	err := inst.Message.DecodeString(str)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	// find response block
-	blist := inst.raw
-	var b1 *pem.Block = nil
-	for _, item := range blist {
-		if wantType.EqualString(item.Type) {
-			b1 = item
-			break
-		}
-	}
-	if b1 == nil {
-		return fmt.Errorf("no pem-block with type: '%s'", wantType.String())
-	}
+// 	// find response block
+// 	blist := inst.raw
+// 	var b1 *pem.Block = nil
+// 	for _, item := range blist {
+// 		if wantType.EqualString(item.Type) {
+// 			b1 = item
+// 			break
+// 		}
+// 	}
+// 	if b1 == nil {
+// 		return fmt.Errorf("no pem-block with type: '%s'", wantType.String())
+// 	}
 
-	inst.Block = *b1
-	inst.raw = blist
+// 	inst.Block = *b1
+// 	inst.raw = blist
 
-	strErr := inst.GetHeader("error")
-	strSta := inst.GetHeader("status")
-	status, _ := ParseStatus(strSta)
+// 	strErr := inst.GetHeader("error")
+// 	strSta := inst.GetHeader("status")
+// 	status, _ := ParseStatus(strSta)
 
-	if strErr != "" {
-		inst.Error = fmt.Errorf("%s", strErr)
-	}
-	inst.Status = *status
+// 	if strErr != "" {
+// 		inst.Error = fmt.Errorf("%s", strErr)
+// 	}
+// 	inst.Status = *status
 
-	return nil
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-func (txt ResponseText) String() string {
-	return string(txt)
-}
+// 	return nil
+// }
 
 ////////////////////////////////////////////////////////////////////////////////
-
-func (txt RequestText) String() string {
-	return string(txt)
-}
-
-////////////////////////////////////////////////////////////////////////////////
+// EOF
