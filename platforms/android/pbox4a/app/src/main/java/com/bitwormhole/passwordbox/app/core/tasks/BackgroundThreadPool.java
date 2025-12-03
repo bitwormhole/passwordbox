@@ -1,4 +1,4 @@
-package com.bitwormhole.passwordbox.app.tasks;
+package com.bitwormhole.passwordbox.app.core.tasks;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;

@@ -4,13 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.ExampleActivity">
+    tools:context=".ui.DebugPromiseActivity">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#ff0000"
         android:padding="10dp"
-        android:text="UI: todo "
+        android:text="UI: debug Promise"
         android:textSize="20dp" />
 
 

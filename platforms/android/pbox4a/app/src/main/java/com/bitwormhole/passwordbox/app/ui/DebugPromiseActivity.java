@@ -6,12 +6,12 @@ import androidx.annotation.Nullable;
 
 import com.bitwormhole.passwordbox.app.R;
 
-public class HomeActivity extends BaseActivity {
+public class DebugPromiseActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_home);
+        setContentView(R.layout.layout_debug_home);
     }
 
 }

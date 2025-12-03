@@ -36,6 +36,31 @@
         android:layout_weight="1" />
 
 
+    <Button
+        android:id="@+id/button_unlock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="100dp"
+        android:text="unlock" />
+
+    <Button
+        android:id="@+id/button_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="100dp"
+        android:text="login" />
+
+    <Button
+        android:id="@+id/button_debug"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="100dp"
+        android:text="debug" />
+
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

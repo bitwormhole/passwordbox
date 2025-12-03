@@ -13,6 +13,8 @@
         android:theme="@style/Theme.Pbox4a">
 
         <activity android:name=".ui.DebugHomeActivity" />
+        <activity android:name=".ui.DebugRootKeyActivity" />
+        <activity android:name=".ui.DebugPromiseActivity" />
 
         <activity android:name=".ui.HomeActivity" />
         <activity android:name=".ui.LoginActivity" />
