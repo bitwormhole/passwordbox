@@ -12,8 +12,8 @@ android {
 
     defaultConfig {
         applicationId = "com.bitwormhole.passwordbox.app"
-        minSdk = 28
-        targetSdk = 36
+        minSdk = 26
+        targetSdk = 26
         versionCode = 1
         versionName = "1.0"
 

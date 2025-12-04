@@ -12,6 +12,7 @@ func TestRequestCodec(t *testing.T) {
 	query := make(map[string]string)
 	props := make(map[string]string)
 	env := make(map[string]string)
+	content := "hello, this is TestRequestCodec"
 
 	// prepare
 
@@ -32,9 +33,9 @@ func TestRequestCodec(t *testing.T) {
 	req1.Host = "bar.example.com"
 	req1.PathWant = "/Test/Request/Codec"
 	req1.Query = query
-	req1.Bytes = []byte("hello, this is TestRequestCodec")
 
-	req1.SetContentType("text/demo")
+	req1.SetContent("text/demo", []byte(content))
+
 	req1.Properties = props
 	req1.Environment = env
 

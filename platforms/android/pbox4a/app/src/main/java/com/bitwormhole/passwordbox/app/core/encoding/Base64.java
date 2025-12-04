@@ -21,12 +21,11 @@ public final class Base64 {
 
     @Override
     public String toString() {
-        return "todo: no impl";
+        return java.util.Base64.getEncoder().encodeToString(this.data);
     }
 
     public static Base64 parse(String str) {
-
-        return null; // todo ...
+        byte[] bin = java.util.Base64.getDecoder().decode(str);
+        return new Base64(bin);
     }
-
 }

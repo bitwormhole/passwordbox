@@ -3,7 +3,7 @@ package com.bitwormhole.passwordbox.app.core.keybase;
 public final class KeyPairAgent {
 
     public static KeyPairHolder getRoot() {
-        return new KeyPairHolder("root");
+        return new RootKeyPairHolder("root_pub");
     }
 
 }

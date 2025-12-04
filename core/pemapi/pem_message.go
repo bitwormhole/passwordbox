@@ -50,33 +50,55 @@ func (txt ResponseText) String() string {
 // Message 表示 一条 pemapi 消息, 它的格式类似于一个完整的 PEM 文件, 由若干个 pem.block 组成
 type Message struct {
 
-	// data of block[0]
-	pem.Block
-
-	// list all blocks
+	// list of all blocks
 	raw []*pem.Block
 }
 
-func (inst *Message) innerGetHeaders(create bool) map[string]string {
-	table := inst.Headers
-	if table == nil {
-		if create {
-			table = make(map[string]string)
-			inst.Headers = table
+func (inst *Message) innerGetMainBlock(create bool) *pem.Block {
+
+	all := inst.raw
+	count := len(all)
+	if count > 0 {
+		b0 := all[0]
+		if b0 != nil {
+			return b0
 		}
 	}
-	return table
+
+	if !create {
+		return nil
+	}
+
+	// do create
+
+	b0 := new(pem.Block)
+	if count > 0 {
+		all[0] = b0
+	} else {
+		all = append(all, b0)
+	}
+	inst.raw = all
+	return b0
 }
 
-func (inst *Message) innerGetBlockID(b *pem.Block) string {
-	if b == nil {
-		return ""
+func (inst *Message) innerGetHeaders(create bool) map[string]string {
+
+	block0 := inst.innerGetMainBlock(create)
+
+	if create {
+		table := block0.Headers
+		if table == nil {
+			table = make(map[string]string)
+			block0.Headers = table
+		}
+		return table
 	}
-	headers := b.Headers
-	if headers == nil {
-		return ""
+
+	// can be nil:
+	if block0 != nil {
+		return block0.Headers
 	}
-	return headers["id"]
+	return nil
 }
 
 func (inst *Message) GetHeader(name string) string {
@@ -101,8 +123,24 @@ func (inst *Message) SetHeader(name, value string) {
 	t[name] = value
 }
 
-func (inst *Message) SetContentType(ctype string) {
-	inst.SetHeader("content-type", ctype)
+func (inst *Message) GetContent() []byte {
+	block := inst.innerGetMainBlock(false)
+	if block == nil {
+		return nil
+	}
+	return block.Bytes
+}
+
+func (inst *Message) SetContent(contentMimeType string, data []byte) {
+	clen := len(data)
+	inst.SetContentLength(clen)
+	inst.SetContentType(contentMimeType)
+	block := inst.innerGetMainBlock(true)
+	block.Bytes = data
+}
+
+func (inst *Message) SetContentType(contentMimeType string) {
+	inst.SetHeader("content-type", contentMimeType)
 }
 
 func (inst *Message) SetContentLength(length int) {
@@ -110,68 +148,11 @@ func (inst *Message) SetContentLength(length int) {
 	inst.SetHeader("content-length", value)
 }
 
-// 使用 'CODEC' 代替:
-
-// func (inst *Message) Encode() ([]byte, error) {
-// 	all := inst.raw
-// 	codec := new(CODEC)
-// 	return codec.encodePemDoc(all)
-// }
-
-// func (inst *Message) Decode(data []byte) error {
-// 	codec := new(CODEC)
-// 	blist, err := codec.decodePemDoc(data)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	inst.raw = blist
-// 	return nil
-// }
-
-// func (inst *Message) EncodeString() (string, error) {
-// 	bin, err := inst.Encode()
-// 	if err != nil {
-// 		return "", err
-// 	}
-// 	str := string(bin)
-// 	return str, nil
-// }
-
-// func (inst *Message) DecodeString(data string) error {
-// 	bin := []byte(data)
-// 	return inst.Decode(bin)
-// }
-
 func (inst *Message) AddBlock(b *pem.Block) {
 	if b == nil {
 		return
 	}
-	list := inst.raw
-	list = append(list, b)
-	inst.raw = list
-}
-
-// 排除重复的 block, by [block.headers.id], 保留最后一个
-func (inst *Message) RemoveRepeatedBlocks() {
-
-	src := inst.raw
-	tmp := make(map[string]*pem.Block)
-	dst := make([]*pem.Block, 0)
-
-	for _, block := range src {
-		id := inst.innerGetBlockID(block)
-		if id == "" {
-			dst = append(dst, block)
-		} else {
-			tmp[id] = block
-		}
-	}
-
-	for _, block := range tmp {
-		dst = append(dst, block)
-	}
-
-	inst.raw = dst
+	inst.raw = append(inst.raw, b)
 }
 
 func (inst *Message) ListBlocks() []*pem.Block {
@@ -179,8 +160,6 @@ func (inst *Message) ListBlocks() []*pem.Block {
 }
 
 func (inst *Message) Reset() {
-	b0 := new(pem.Block)
-	inst.Block = *b0
 	inst.raw = nil
 }
 

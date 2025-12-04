@@ -30,6 +30,10 @@ public final class HomeDir {
         return new File(this.home, "etc");
     }
 
+    public File getTmpDir() {
+        return new File(this.home, "tmp");
+    }
+
     public File getBanksDir() {
         return new File(this.home, "banks");
     }

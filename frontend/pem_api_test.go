@@ -33,7 +33,7 @@ func TestPEMAPI(t *testing.T) {
 	}
 
 	content := "hello, PEM-API"
-	req.Bytes = []byte(content)
+	req.SetContent("text/plain", []byte(content))
 
 	err := api.ExecuteContext(ctx)
 	if err == nil {
