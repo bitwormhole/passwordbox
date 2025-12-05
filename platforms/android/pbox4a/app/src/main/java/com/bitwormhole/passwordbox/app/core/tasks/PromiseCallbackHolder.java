@@ -2,33 +2,68 @@ package com.bitwormhole.passwordbox.app.core.tasks;
 
 public class PromiseCallbackHolder<T> {
 
-    private PromiseCallback<T> callback;
+    private final PromiseThenCallback<T> callbackThen;
+    private final PromiseCatchCallback<T> callbackCatch;
+    private final PromiseFinallyCallback<T> callbackFinally;
+    private final PromiseProgressCallback<T> callbackProgress;
 
-    public PromiseCallbackHolder(PromiseCallback<T> cb) {
-        this.callback = cb;
+    private PromiseCallbackHolder() {
+        this.callbackProgress = null;
+        this.callbackThen = null;
+        this.callbackCatch = null;
+        this.callbackFinally = null;
     }
 
-    public PromiseCallback<T> getCallback() {
-        return callback;
+
+    public PromiseCallbackHolder(PromiseThenCallback<T> c) {
+        this.callbackThen = c;
+
+        this.callbackProgress = null;
+        //  this.callbackThen = null ;
+        this.callbackCatch = null;
+        this.callbackFinally = null;
     }
 
-    public void setCallback(PromiseCallback<T> callback) {
-        this.callback = callback;
+    public PromiseCallbackHolder(PromiseProgressCallback<T> c) {
+        this.callbackProgress = c;
+
+        //  this.callbackProgress  = null ;
+        this.callbackThen = null;
+        this.callbackCatch = null;
+        this.callbackFinally = null;
     }
 
-    public PromiseCallbackHolder<T> handleThen() {
-        // todo
-        return this;
+    public PromiseCallbackHolder(PromiseCatchCallback<T> c) {
+        this.callbackCatch = c;
+
+        this.callbackProgress = null;
+        this.callbackThen = null;
+        //   this.callbackCatch  = null ;
+        this.callbackFinally = null;
     }
 
-    public PromiseCallbackHolder<T> handleCatch() {
-        // todo
-        return this;
+    public PromiseCallbackHolder(PromiseFinallyCallback<T> c) {
+        this.callbackFinally = c;
+
+        this.callbackProgress = null;
+        this.callbackThen = null;
+        this.callbackCatch = null;
+        //     this.callbackFinally  = null ;
     }
 
-    public PromiseCallbackHolder<T> handleFinally() {
-        // todo
-        return this;
+    public PromiseThenCallback<T> getCallbackThen() {
+        return callbackThen;
     }
 
+    public PromiseCatchCallback<T> getCallbackCatch() {
+        return callbackCatch;
+    }
+
+    public PromiseFinallyCallback<T> getCallbackFinally() {
+        return callbackFinally;
+    }
+
+    public PromiseProgressCallback<T> getCallbackProgress() {
+        return callbackProgress;
+    }
 }

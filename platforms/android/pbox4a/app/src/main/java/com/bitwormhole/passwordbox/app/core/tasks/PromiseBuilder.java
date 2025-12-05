@@ -9,14 +9,23 @@ public final class PromiseBuilder<T> {
 
     private Executor backgroundExecutor;
     private Executor foregroundExecutor;
-    private Context context;
+    private PromiseContext<T> context;
     private PromiseTaskList<T> tasks;
     private Throwable error;
     private T result;
 
     public PromiseBuilder(Context ctx) {
-        this.context = ctx;
-        this.tasks = new PromiseTaskList<>();
+
+        PromiseContext<T> pc = new PromiseContext<>();
+        PromiseTaskList<T> tasklist = new PromiseTaskList<>(pc);
+        PromiseCallbackChain<T> chain = new PromiseCallbackChain<>(pc);
+
+        pc.setContext(ctx);
+        pc.setChain(chain);
+        pc.setTasks(tasklist);
+
+        this.context = pc;
+        this.tasks = tasklist;
     }
 
     public PromiseBuilder<T> reset() {
@@ -30,7 +39,7 @@ public final class PromiseBuilder<T> {
     public PromiseBuilder<T> addTask(PromiseTask<T> task) {
         PromiseTaskList<T> list = this.tasks;
         if (list == null) {
-            list = new PromiseTaskList<>();
+            list = new PromiseTaskList<>(this.context);
             this.tasks = list;
         }
         list.addTask(task);
@@ -40,7 +49,7 @@ public final class PromiseBuilder<T> {
     public Promise<T> build() {
 
         innerDefaultGetter<T> getter = new innerDefaultGetter<>(this);
-        PromiseContext<T> pc = new PromiseContext<>();
+        PromiseContext<T> pc = getter.getPC();
 
         pc.setContext(getter.getContext());
         pc.setBackgroundExecutor(getter.getBgExecutor());
@@ -88,6 +97,15 @@ public final class PromiseBuilder<T> {
             return bg;
         }
 
+        PromiseContext<T> getPC() {
+            PromiseContext<T> pc = builder.context;
+            if (pc == null) {
+                pc = this.loadPC();
+                builder.context = pc;
+            }
+            return pc;
+        }
+
         PromiseTaskList<T> getTaskList() {
             PromiseTaskList<T> list = builder.getTasks();
             if (list == null) {
@@ -103,16 +121,26 @@ public final class PromiseBuilder<T> {
 
         Executor loadFgExecutor() {
             Context ctx = this.getContext();
-            Activity act = (Activity) ctx;
-            return new ActivityForegroundExecutor(act);
+            if (ctx instanceof Activity) {
+                Activity act = (Activity) ctx;
+                return new ActivityForegroundExecutor(act);
+            } else {
+                return ForegroundThreadPool.getExecutor();
+            }
         }
 
         Executor loadBgExecutor() {
             return BackgroundThreadPool.getExecutor();
         }
 
+        PromiseContext<T> loadPC() {
+            return new PromiseContext<>();
+        }
+
+
         PromiseTaskList<T> loadTaskList() {
-            return new PromiseTaskList<>();
+            PromiseContext<T> pc = this.getPC();
+            return new PromiseTaskList<>(pc);
         }
     }
 
@@ -126,11 +154,11 @@ public final class PromiseBuilder<T> {
     }
 
     public Context getContext() {
-        return context;
+        return context.getContext();
     }
 
     public PromiseBuilder<T> setContext(Context context) {
-        this.context = context;
+        this.context.setContext(context);
         return this;
     }
 

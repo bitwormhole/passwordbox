@@ -15,10 +15,15 @@ import org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
 
+    private Context getContext() {
+        return InstrumentationRegistry.getInstrumentation().getTargetContext();
+    }
+
+
     @Test
     public void useAppContext() {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext(); // .targetContext ;
-        Assert.assertEquals("com.bitwormhole.passwordbox.app", appContext.getPackageName());
+        Context ctx = this.getContext();
+        Assert.assertEquals("com.bitwormhole.passwordbox.app", ctx.getPackageName());
     }
+
 }

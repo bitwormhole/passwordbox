@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PBox - Logo</title>
+
+    <style>
+        .box {
+            background-color: rgb(197, 197, 197);
+            width: 512px;
+            height: 512px;
+
+            border-color: black;
+            border-width: 9px;
+            border-style: solid;
+
+            padding: 30px;
+
+            display: flex;
+            flex-direction: column;
+            border-radius: 30px;
+        }
+
+        .display {
+            background-color: black;
+            color: rgb(121, 230, 121);
+            font-size: 65px;
+            padding: 20px;
+            margin-left: 30px;
+            margin-right: 30px;
+            border-radius: 30px;
+
+
+            display: flex;
+            flex-direction: row;
+            justify-items: center;
+            align-items: center;
+            text-align: left;
+        }
+
+        .door {
+            border-color: black;
+            border-width: 9px;
+            border-style: solid;
+            padding: 30px;
+
+            background-color: rgba(255, 0, 0, 0);
+
+            margin-top: 30px;
+
+            flex-grow: 1;
+            border-radius: 30px;
+
+            display: flex;
+            flex-direction: row;
+            justify-items: center;
+            align-items: center;
+        }
+
+        .knob {
+            border-color: black;
+            border-width: 9px;
+
+            border-radius: 50%;
+
+        }
+
+        .knob-inner {
+            width: 50px;
+            height: 50px;
+            background-color: rgb(243, 243, 243);
+            border-style: dashed;
+        }
+
+        .knob-outer {
+            padding: 10px;
+            background-color: rgb(148, 148, 148);
+            border-style: dashed;
+        }
+
+
+        .passwd {
+            display: inline-block;
+            justify-content: center;
+            justify-self: center;
+            align-content: center;
+            align-self: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>logo </h1>
+
+    <div class="logo">
+        <div class="box">
+            <div class="display">
+                <div class="passwd"> ＊＊＊ _</div>
+            </div>
+            <div class="door">
+                <div class="knob knob-outer">
+                    <div class="knob knob-inner"> </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

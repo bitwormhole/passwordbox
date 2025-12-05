@@ -8,9 +8,13 @@ public final class PromiseContext<T> {
 
     private Executor backgroundExecutor;
     private Executor foregroundExecutor;
+    private long foregroundTID; // the foreground-thread-id
     private Context context;
     private T result;
+    private boolean abort;
     private Throwable error;
+
+
     private PromiseCallbackChain<T> chain;
     private PromiseTaskList<T> tasks;
 
@@ -73,8 +77,25 @@ public final class PromiseContext<T> {
         this.tasks = tasks;
     }
 
-    public void start() {
-        // todo
+
+    public long getForegroundTID() {
+        return foregroundTID;
     }
 
+    public void setForegroundTID(long foregroundTID) {
+        this.foregroundTID = foregroundTID;
+    }
+
+    public boolean isAbort() {
+        return abort;
+    }
+
+    public void setAbort(boolean abort) {
+        this.abort = abort;
+    }
+
+    public void start() {
+        this.foregroundTID = Thread.currentThread().getId();
+        this.tasks.execute();
+    }
 }
